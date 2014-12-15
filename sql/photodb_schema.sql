@@ -39,7 +39,7 @@ create table RelationPhotoCategory (
 alter table Users add foreign key (avatar) references Photos(idphoto);
 insert into Users (username, password, avatar) values ('PauNoSuspendeDsa', 'holahola', null);
 insert into Photos (iduser, idautor, name, description) values (1, 1, 'dfgh', 'sdghs');
-update Users set avatar = 1 where iduser = 1;
+update Users set avatar = 1 where userid = 1;
 
 create table Comments (
 	idcomment int not null auto_increment primary key,
@@ -74,14 +74,14 @@ create table RelacionUserFollows (
 	iduser int not null,
 	idfollowed int not null,
 	primary key (idfollowed, iduser),
-	foreign key (idfollowed) references Users(iduser),
-	foreign key  (iduser) references Users(iduser)
+	foreign key (idfollowed) references Users(userid),
+	foreign key  (iduser) references Users(userid)
 );
 
 create table RelacionUserCategories (
 	iduser int not null,
 	idcategory int not null,
-	foreign key (iduser) references Users(iduser),
+	foreign key (iduser) references Users(userid),
 	foreign key (idcategory)  references Categories(idcategory)
 );
 
