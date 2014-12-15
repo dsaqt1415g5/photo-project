@@ -8,11 +8,11 @@ create table Users (
 	username varchar (50) unique not null,
 	password varchar (50) not null,
 	avatar int null,
-	idprofile int not null
+	idprofile int
 	);
 
 create table Categories(
-	idcategory primary key int not null auto_increment,
+	idcategory int not null auto_increment primary key,
 	nombre varchar(50)	
 );
 
@@ -21,8 +21,8 @@ create table Photos (
 	iduser  int not null,
 	idautor	int not null,
 	file varchar (50) unique,
-	name varchar (50) not null,
-	description varchar (50) not null,
+	name varchar (50),
+	description varchar (50),
 	creation timestamp,
 	foreign key (iduser) references Users(iduser),
 	foreign key (idautor) references Users(iduser)
@@ -52,7 +52,7 @@ create table Comments (
 );
 
 create table Albums (
-	idalbum int not null auto increment primary key,
+	idalbum int not null auto_increment primary key,
 	nombre varchar(50) not null,
 	descritpion varchar(50) not null,
 	iduser int not null,
@@ -76,6 +76,12 @@ create table RelacionUserFollows (
 	primary key (idfollowed, iduser),
 	foreign key (idfollowed) references Users(iduser),
 	foreign key  (iduser) references Users(iduser)
-	
+);
+
+create table RelacionUserCategories (
+	iduser int not null,
+	idcategory int not null,
+	foreign key (iduser) references Users(iduser),
+	foreign key (idcategory)  references Categories(idcategory)
 );
 
