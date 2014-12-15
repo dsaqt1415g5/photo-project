@@ -4,7 +4,7 @@ create database photosdb;
 use photosdb;
 
 create table Users (
-	iduser	int not null auto_increment primary key,
+	userid	int not null auto_increment primary key,
 	username varchar (50) unique not null,
 	password varchar (50) not null,
 	avatar int null,
@@ -24,8 +24,8 @@ create table Photos (
 	name varchar (50),
 	description varchar (50),
 	creation timestamp,
-	foreign key (iduser) references Users(iduser),
-	foreign key (idautor) references Users(iduser)
+	foreign key (iduser) references Users(userid),
+	foreign key (idautor) references Users(userid)
 );
 
 create table RelationPhotoCategory (
@@ -47,7 +47,7 @@ create table Comments (
 	idphoto int not null,
 	creation timestamp not null,
 	content varchar(500) not null,
-	foreign key (iduser) references Users(iduser) on delete cascade,
+	foreign key (iduser) references Users(userid) on delete cascade,
 	foreign key (idphoto) references Photos(idphoto) on delete cascade
 );
 
@@ -56,7 +56,7 @@ create table Albums (
 	nombre varchar(50) not null,
 	descritpion varchar(50) not null,
 	iduser int not null,
-	foreign key (iduser) references Users(iduser) on delete cascade
+	foreign key (iduser) references Users(userid) on delete cascade
 );
 
 create table RelationPhotoAlbum (
