@@ -1,7 +1,7 @@
 drop database photosdb;
 create database photosdb;
 
-use photosdb;
+use photosdb; 
 
 create table Users (
 	username varchar (50) primary key not null,
