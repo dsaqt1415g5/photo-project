@@ -9,10 +9,28 @@ create table Users (
 	avatar int null
 );
 
-create table Categories(
-	idcategory int not null auto_increment primary key,
-	nombre varchar(50)	
-);
+create table Photos (
+	idphoto	int not null auto_increment primary key,
+	iduser  int not null,
+	idautor	int not null,
+	file varchar (50) unique,
+	name varchar (50),
+	description varchar (50),
+	creation timestamp,
+	foreign key (iduser) references Users(userid),
+	foreign key (idautor) references Users(userid)
+);drop database photosdb;
+create database photosdb;
+
+use photosdb;
+
+create table Users (
+	userid	int not null auto_increment primary key,
+	username varchar (50) unique not null,
+	password varchar (50) not null,
+	avatar int null,
+	idprofile int
+	);
 
 create table Photos (
 	idphoto	int not null auto_increment primary key,
@@ -26,6 +44,7 @@ create table Photos (
 	foreign key (idautor) references Users(username)
 );
 
+
 create table RelationPhotoCategory (
 	primary key  (idphoto, idcategory),
 	idphoto int not null,
@@ -33,6 +52,7 @@ create table RelationPhotoCategory (
 	foreign key (idphoto) references Photos(idphoto) on delete cascade,
 	foreign key (idcategory) references Categories(idcategory) on delete cascade
 );
+
 
 create table Comments (
 	idcomment int not null auto_increment primary key,
@@ -44,9 +64,23 @@ create table Comments (
 	foreign key (idphoto) references Photos(idphoto) on delete cascade
 );
 
+create table Categories(
+	idcategory int not null auto_increment primary key,
+	nombre varchar(50)	
+);
+
+create table RelationPhotoCategory (
+	primary key  (idphoto, idcategory),
+	idphoto int not null,
+	idcategory int not null,
+	foreign key (idphoto) references Photos(idphoto) on delete cascade,
+	foreign key (idcategory) references Categories(idcategory) on delete cascade
+);
+
 create table Albums (
 	idalbum int not null auto_increment primary key,
 	nombre varchar(50) not null,
+
 	descritpion varchar(50) not null,
 	username varchar (50) not null,
 	foreign key (username) references Users(username) on delete cascade
@@ -59,9 +93,6 @@ create table RelationPhotoAlbum (
 	foreign key (idphoto) references Photos(idphoto) on delete cascade,
 	foreign key (idalbum) references Albums(idalbum) on delete cascade
 );
-
-
-
 
 create table RelacionUserFollows (
 	username varchar (50) not null,
@@ -77,4 +108,3 @@ create table RelacionUserCategories (
 	foreign key (username) references Users(username),
 	foreign key (idcategory)  references Categories(idcategory)
 );
-
