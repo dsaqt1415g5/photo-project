@@ -6,6 +6,6 @@
 		url="jdbc:mysql://localhost:3306/photosdb?autoReconnect=true" />
 	<Realm className="org.apache.catalina.realm.DataSourceRealm"
 		dataSourceName="jdbc/photosdb" localDataSource="true" digest="MD5"
-		userTable="users" userNameCol="username" userCredCol="userpass"
+		userTable="Users" userNameCol="username" userCredCol="password"
 		userRoleTable="user_roles" roleNameCol="rolename" />
 </Context>
