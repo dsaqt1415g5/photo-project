@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -29,6 +30,7 @@ public class PhotoResource {
 	
 	private String GET_COMMENTS_BY_IDPHOTO="Select * from Comments where idphoto = ?";
 	private String INSERT_COMMENT="insert into Comments (username, idphoto, content) values (?,?,?)";
+	private String DELETE_COMMENT_QUERY ="delete from comments where idcomment = ?";
 	
 	@Context
 	private SecurityContext security;
@@ -119,5 +121,35 @@ public class PhotoResource {
 		return comment;
 	}
 	
+	@DELETE
+	public void deleteComment (@QueryParam("idcomment") int idcomment){
+		
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	 
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(DELETE_COMMENT_QUERY);
+			stmt.setInt(1, Integer.valueOf(idcomment));
+	 
+			int rows = stmt.executeUpdate();
+			if (rows == 0)
+				;// Deleting inexistent sting
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+	}
 	
 }
