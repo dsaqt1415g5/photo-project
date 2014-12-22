@@ -91,9 +91,10 @@ public class PhotoResource {
 		PreparedStatement stmt = null;
 		try {
 			stmt = conn.prepareStatement(INSERT_COMMENT,Statement.RETURN_GENERATED_KEYS);
-		
-			stmt.setInt(1, comment.getIdphoto());
-			stmt.setString(2, comment.getContent());
+			
+			stmt.setString(1, comment.getUsername());
+			stmt.setInt(2, comment.getIdphoto());
+			stmt.setString(3, comment.getContent());
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			//if (rs.next()) {

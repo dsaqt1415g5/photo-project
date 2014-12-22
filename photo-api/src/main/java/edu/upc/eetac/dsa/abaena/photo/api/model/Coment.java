@@ -8,8 +8,6 @@ public class Coment {
 	private long creationTimestamp;
 	private String content;
 	
-
-	
 	public String getUsername() {
 		return username;
 	}
