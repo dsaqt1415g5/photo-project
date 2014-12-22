@@ -13,5 +13,8 @@ public class ComentCollection {
 	public void setComments(List<Coment> comments) {
 		this.comments = comments;
 	}
+	public void addComment(Coment comment) {
+		comments.add(comment);
+	}
 
 }
