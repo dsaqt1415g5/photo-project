@@ -83,7 +83,7 @@ create table Albums (
 
 	descritpion varchar(50) not null,
 	username varchar (50) not null,
-	foreign key (username) references Users(username) on delete cascade
+	foreign key (username) references Users(username) on delete cascade 
 );
 
 create table RelationPhotoAlbum (
