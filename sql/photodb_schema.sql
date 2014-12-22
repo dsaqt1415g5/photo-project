@@ -9,7 +9,6 @@ create table Users (
 	avatar int null
 );
 
-
 create table Photos (
 	idphoto	int not null auto_increment primary key,
 	username varchar (50) not null,
