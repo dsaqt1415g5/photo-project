@@ -28,7 +28,7 @@ public class PhotoResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
 	
 	private String GET_COMMENTS_BY_IDPHOTO="Select * from Comments where idphoto = ?";
-	private String INSERT_COMMENT="insert into Comments (idphoto, content) values (?,?)";
+	private String INSERT_COMMENT="insert into Comments (username, idphoto, content) values (?,?,?)";
 	
 	@Context
 	private SecurityContext security;
@@ -49,14 +49,14 @@ public class PhotoResource {
 		PreparedStatement stmt = null;
 		try{
 			stmt = conn.prepareStatement(GET_COMMENTS_BY_IDPHOTO);
-			stmt.setInt(1, Integer.valueOf(idphoto));
+			stmt.setInt(1, idphoto);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				Coment comment = new Coment();
 				comment.setIdcomment(rs.getInt("idcomment"));
-				comment.setUser(rs.getString("user"));
+				comment.setUsername(rs.getString("username"));
 				comment.setIdphoto(rs.getInt("idphoto"));
-				comment.setCreationTimestamp(rs.getLong("creationTimestamp"));
+				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));	
 				comments.addComment(comment);
 			}
@@ -72,7 +72,6 @@ public class PhotoResource {
 				} catch (SQLException e) {
 				}
 			}
-			
 		return comments;
 	}
 	

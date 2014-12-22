@@ -7,5 +7,5 @@ public class MediaType {
 	public final static String PHOTO_API_PHOTO_COLLECTION = "application/vnd.photo.api.photo.collection+json";
 	public final static String PHOTO_API_COMENT = "application/vnd.photo.api.coment+json";
 	public final static String PHOTO_API_COMENT_COLLECTION = "application/vnd.photo.api.coment.collection+json";
-	public final static String PHOTO_API_ERROR = "application/vnd.dsa.api.error+json";
+	public final static String PHOTO_API_ERROR = "application/vnd.dsa.api.photos.error+json";
 }

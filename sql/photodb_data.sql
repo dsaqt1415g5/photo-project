@@ -11,9 +11,9 @@ update Users set avatar = 2 where username = 'cris';
 update Users set avatar = 3 where username = 'alex';
 
 
-insert into Comments (username, idphoto, content) values ('pau',1,'comentario de pau a la foto de pau');
-insert into Comments (username, idphoto, content) values ('cris',2,'comentario de pau a la 2a foto de pau');
-insert into Comments (username, idphoto, content) values ('alex',3,'comentario de cris a la 3a foto de pau');
+insert into Comments (username, idphoto, content) values ('pau',1,'comentario de pau a la 1a foto de pau');
+insert into Comments (username, idphoto, content) values ('cris',1,'comentario de cris a la 1a foto de pau');
+insert into Comments (username, idphoto, content) values ('alex',3,'comentario de alex a la 3a foto de pau');
 
 
 insert into Categories (nombre) values ('futbol');
@@ -39,3 +39,6 @@ insert into RelacionUserFollows (username, followed) values ('alex', 'cris');
 insert into RelacionUserCategories (username, idcategory) values ('pau', 1);
 insert into RelacionUserCategories (username, idcategory) values ('pau', 2);
 insert into RelacionUserCategories (username, idcategory) values ('pau', 3);
+
+
+
