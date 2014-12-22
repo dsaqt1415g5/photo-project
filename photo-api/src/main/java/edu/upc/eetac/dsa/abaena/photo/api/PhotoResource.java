@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -31,7 +32,8 @@ public class PhotoResource {
 	private String GET_COMMENTS_BY_IDPHOTO="Select * from Comments where idphoto = ?";
 	private String INSERT_COMMENT="insert into Comments (username, idphoto, content) values (?,?,?)";
 	private String DELETE_COMMENT_QUERY ="delete from comments where idcomment = ?";
-	
+	private String GET_COMMENT_BY_ID="Select * from comments where idcomment=?";
+	private String UPDATE_COMMENT_QUERY="update comments set content=ifnull(?,content) where idcomment = ?";
 	@Context
 	private SecurityContext security;
 	
@@ -149,6 +151,86 @@ public class PhotoResource {
 			} catch (SQLException e) {
 			}
 		}
+		
+	}
+	
+	@GET
+	@Produces(MediaType.PHOTO_API_COMENT)
+	public Coment getComment(@QueryParam("idcomment") int idcomment){
+		
+		Coment comment =new Coment();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_COMMENT_BY_ID);
+			stmt.setInt(1, Integer.valueOf(idcomment));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				comment.setIdcomment(rs.getInt("idcomment"));
+				comment.setUsername(rs.getString("username"));
+				comment.setIdphoto(rs.getInt("idphoto"));
+				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
+				comment.setContent(rs.getString("content"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	 
+		return comment;
+		
+	}
+	
+	
+	@PUT
+	@Consumes(MediaType.PHOTO_API_COMENT)
+	@Produces(MediaType.PHOTO_API_COMENT)
+	public Coment updateComment (@QueryParam("idcomment") int idcomment, Coment comment){
+		
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	 
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(UPDATE_COMMENT_QUERY);
+			stmt.setString(1, comment.getContent());
+			stmt.setInt(2, idcomment);
+			int rows = stmt.executeUpdate();
+			if (rows == 1)
+				comment = getComment(idcomment);
+			else {
+				;// Updating inexistent sting
+			}
+	 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	 
+		return comment;
+		
 		
 	}
 	
