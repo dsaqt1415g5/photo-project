@@ -12,6 +12,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,7 +32,10 @@ public class UserResource {
 
 	private final static String GET_USER_BY_USERNAME = "Select * from Users where username=?";
 	private final static String INSERT_USER_INTO_USERS = "insert into Users (username, password, avatar) values(?, MD5(?), null)";
-
+	private final static String DELETE_USER = "Delete from Users where username=? ";
+	private final static String UPDATE_USER = "update Users set username=ifnull(?, username), password=ifnull(?,password) where username=?";
+	
+	
 	@GET
 	@Path("/{username}")
 	@Produces(MediaType.PHOTO_API_USER)
@@ -60,7 +64,7 @@ public class UserResource {
 
 			} else {
 				throw new NotFoundException(
-						"No existe ningún usuario con este username=" + username);
+						"No existe ningún usuario con este nombre = " + username);
 			}
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
@@ -100,8 +104,8 @@ public class UserResource {
 
 			ResultSet rs = stmtGetUsername.executeQuery();
 			if (rs.next())
-				throw new WebApplicationException(user.getUsername()
-						+ " El usuario ya existe.", Status.CONFLICT);// tu
+				throw new WebApplicationException("El usuario con nombre " + user.getUsername()
+						+ " ya existe.", Status.CONFLICT);// tu
 																		// nombre
 																		// de
 																		// usuario
@@ -148,8 +152,134 @@ public class UserResource {
 		return user;
 	}
 
-/*	@DELETE
-	@Path("/{username")
-	public void deleteUser*/
+	@DELETE
+	@Path("/{username}")
+	public String deleteUser(@PathParam("username") String username) {
+		
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(DELETE_USER);
+			stmt.setString(1, username);
+	 
+			int rows = stmt.executeUpdate();
+			if (rows == 0)
+				throw new NotFoundException("No existe ningún usuario con este nombre = "
+						+ username);
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+			
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+		return ("Usuario borrado");
+	}
+
+	
+@PUT
+@Path("/{username}")
+@Consumes(MediaType.PHOTO_API_USER)
+@Produces(MediaType.PHOTO_API_USER)
+public User updateUser(@PathParam("username") String username, User user) {
+	
+	
+	Connection conn = null;
+	try {
+		conn = ds.getConnection();
+	} catch (SQLException e) {
+		throw new ServerErrorException("Could not connect to the database",
+				Response.Status.SERVICE_UNAVAILABLE);
+	}
+ 
+	PreparedStatement stmt = null;
+	try {
+				
+		stmt = conn.prepareStatement(UPDATE_USER);
+		stmt.setString(1, user.getUsername());
+		stmt.setString(2, user.getPassword());
+	//	stmt.setString(3, username);
+ 
+		int rows = stmt.executeUpdate();
+		
+		if (rows == 1)
+			
+			user = getUsernameFromDatabase(username);
+		
+	} catch (SQLException e) {
+		throw new ServerErrorException(e.getMessage(),
+				Response.Status.INTERNAL_SERVER_ERROR);
+	} finally {
+		try {
+			if (stmt != null)
+				stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+		}
+	}
+ 
+	return user;
+}
+
+private User getUsernameFromDatabase(String username) {
+	
+	User user = new User();
+
+Connection conn = null;
+try {
+	conn = ds.getConnection();
+	} catch (SQLException e) {
+		throw new ServerErrorException("Could not connect to the database",
+				Response.Status.SERVICE_UNAVAILABLE);	
+		}
+
+PreparedStatement stmt = null;
+try {
+	stmt = conn.prepareStatement(buildGetUserByUsername());
+	stmt.setString(1, username);
+	ResultSet rs = stmt.executeQuery();
+	if (rs.next()) {
+		user.setUsername(rs.getString("username"));
+		user.setPassword(rs.getString("password"));
+	
+
+	} else {
+		throw new NotFoundException("No existe ningún usuario con este nombre = "
+				+ username);
+	}
+
+} catch (SQLException e) {
+	throw new ServerErrorException(e.getMessage(),
+			Response.Status.INTERNAL_SERVER_ERROR);
+} finally {
+	try {
+		if (stmt != null)
+			stmt.close();
+		conn.close();
+	} catch (SQLException e) {
+
+	}
+}
+return user;
+
+	}
+
+	public String buildGetUserByUsername() {
+		return "SELECT *FROM Users WHERE username=?;";
+	}
 	
 }
+	
+
