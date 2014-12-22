@@ -53,9 +53,10 @@ public class PhotoResource {
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				Coment comment = new Coment();
-				comment.setIdphoto(rs.getInt("idphoto"));
 				comment.setIdcomment(rs.getInt("idcomment"));
-				comment.setTimestamp(rs.getLong("timestamp"));
+				comment.setUser(rs.getString("user"));
+				comment.setIdphoto(rs.getInt("idphoto"));
+				comment.setCreationTimestamp(rs.getLong("creationTimestamp"));
 				comment.setContent(rs.getString("content"));	
 				comments.addComment(comment);
 			}

@@ -3,36 +3,39 @@ package edu.upc.eetac.dsa.abaena.photo.api.model;
 public class Coment {
 	
 	private int idcomment;
-	private int iduser;
+	private String user;
 	private int idphoto;
-	private long timestamp;
+	private long creationTimestamp;
 	private String content;
 	
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
 	
+	public long getCreationTimestamp() {
+		return creationTimestamp;
+	}
+	public void setCreationTimestamp(long creationTimestamp) {
+		this.creationTimestamp = creationTimestamp;
+	}
+
 	public int getIdcomment() {
 		return idcomment;
 	}
 	public void setIdcomment(int idcomment) {
 		this.idcomment = idcomment;
 	}
-	public int getIduser() {
-		return iduser;
-	}
-	public void setIduser(int iduser) {
-		this.iduser = iduser;
-	}
+
 	public int getIdphoto() {
 		return idphoto;
 	}
 	public void setIdphoto(int idphoto) {
 		this.idphoto = idphoto;
 	}
-	public long getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
+
 	public String getContent() {
 		return content;
 	}

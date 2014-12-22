@@ -3,8 +3,8 @@ package edu.upc.eetac.dsa.abaena.photo.api.model;
 public class Photo {
 	
 	private int idphoto;
-	private int iduser;
-	private int idautor;
+	private String user;
+	private String autor;
 	private String file;
 	private String name;
 	private String description; 
@@ -16,17 +16,18 @@ public class Photo {
 	public void setIdphoto(int idphoto) {
 		this.idphoto = idphoto;
 	}
-	public int getIduser() {
-		return iduser;
+
+	public String getUser() {
+		return user;
 	}
-	public void setIduser(int iduser) {
-		this.iduser = iduser;
+	public void setUser(String user) {
+		this.user = user;
 	}
-	public int getIdautor() {
-		return idautor;
+	public String getAutor() {
+		return autor;
 	}
-	public void setIdautor(int idautor) {
-		this.idautor = idautor;
+	public void setAutor(String autor) {
+		this.autor = autor;
 	}
 	public String getFile() {
 		return file;
