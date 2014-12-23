@@ -33,7 +33,7 @@ public class UserResource {
 	private final static String GET_USER_BY_USERNAME = "Select * from Users where username=?";
 	private final static String INSERT_USER_INTO_USERS = "insert into Users (username, password, avatar) values(?, MD5(?), null)";
 	private final static String DELETE_USER = "Delete from Users where username=? ";
-	private final static String UPDATE_USER = "update Users set username=ifnull(?, username), password=ifnull(?,password) where username=?";
+	private final static String UPDATE_USER = "update Users set password=ifnull(?,password) where username=?";
 	
 	
 	@GET
@@ -81,6 +81,7 @@ public class UserResource {
 		return user;
 	}
 
+	@Path("/login")
 	@POST
 	@Consumes(MediaType.PHOTO_API_USER)
 	@Produces(MediaType.PHOTO_API_USER)
@@ -189,11 +190,11 @@ public class UserResource {
 	}
 
 	
-@PUT
-@Path("/{username}")
-@Consumes(MediaType.PHOTO_API_USER)
-@Produces(MediaType.PHOTO_API_USER)
-public User updateUser(@PathParam("username") String username, User user) {
+	@PUT
+	@Path("/{username}")
+	@Consumes(MediaType.PHOTO_API_USER)
+	@Produces(MediaType.PHOTO_API_USER)
+	public User updateUser(@PathParam("username") String username, User user) {
 	
 	
 	Connection conn = null;
@@ -208,9 +209,9 @@ public User updateUser(@PathParam("username") String username, User user) {
 	try {
 				
 		stmt = conn.prepareStatement(UPDATE_USER);
-		stmt.setString(1, user.getUsername());
-		stmt.setString(2, user.getPassword());
-	//	stmt.setString(3, username);
+	
+		stmt.setString(1, user.getPassword());
+		stmt.setString(2, username);
  
 		int rows = stmt.executeUpdate();
 		
@@ -229,24 +230,24 @@ public User updateUser(@PathParam("username") String username, User user) {
 		} catch (SQLException e) {
 		}
 	}
- 
+	user.setPassword(null);
 	return user;
 }
 
-private User getUsernameFromDatabase(String username) {
+	private User getUsernameFromDatabase(String username) {
 	
 	User user = new User();
 
-Connection conn = null;
-try {
+	Connection conn = null;
+	try {
 	conn = ds.getConnection();
 	} catch (SQLException e) {
 		throw new ServerErrorException("Could not connect to the database",
 				Response.Status.SERVICE_UNAVAILABLE);	
 		}
 
-PreparedStatement stmt = null;
-try {
+	PreparedStatement stmt = null;
+	try {
 	stmt = conn.prepareStatement(buildGetUserByUsername());
 	stmt.setString(1, username);
 	ResultSet rs = stmt.executeQuery();
@@ -260,10 +261,10 @@ try {
 				+ username);
 	}
 
-} catch (SQLException e) {
+	} catch (SQLException e) {
 	throw new ServerErrorException(e.getMessage(),
 			Response.Status.INTERNAL_SERVER_ERROR);
-} finally {
+	} finally {
 	try {
 		if (stmt != null)
 			stmt.close();
@@ -271,13 +272,13 @@ try {
 	} catch (SQLException e) {
 
 	}
-}
-return user;
+	}
+	return user;
 
 	}
 
 	public String buildGetUserByUsername() {
-		return "SELECT *FROM Users WHERE username=?;";
+		return "SELECT *FROM Users WHERE username=?";
 	}
 	
 }
