@@ -6,8 +6,14 @@ public class Albums {
 	private int idalbum;
 	private String nombre;
 	private String description;
-	private int iduser;
+	private String username;
 	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public int getIdalbum() {
 		return idalbum;
 	}
@@ -26,13 +32,5 @@ public class Albums {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public int getIduser() {
-		return iduser;
-	}
-	public void setIduser(int iduser) {
-		this.iduser = iduser;
-	}
 
-	
-	
 }
