@@ -9,7 +9,9 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -34,6 +36,7 @@ public class PhotoResource {
 	private String DELETE_COMMENT_QUERY ="delete from comments where idcomment = ?";
 	private String GET_COMMENT_BY_ID="Select * from comments where idcomment=?";
 	private String UPDATE_COMMENT_QUERY="update comments set content=ifnull(?,content) where idcomment = ?";
+	
 	@Context
 	private SecurityContext security;
 	
@@ -125,7 +128,7 @@ public class PhotoResource {
 	
 	@DELETE
 	public void deleteComment (@QueryParam("idcomment") int idcomment){
-		
+
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -177,7 +180,52 @@ public class PhotoResource {
 				comment.setIdphoto(rs.getInt("idphoto"));
 				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));
+			}else {
+				throw new NotFoundException("There's no comment with idcomment="
+						+ idcomment);
+					}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
 			}
+		}
+	 
+		return comment;
+		
+	}
+	
+public Coment getCommentFromDataBase(int idcomment){
+		
+		Coment comment =new Coment();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_COMMENT_BY_ID);
+			stmt.setInt(1, Integer.valueOf(idcomment));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				comment.setIdcomment(rs.getInt("idcomment"));
+				comment.setUsername(rs.getString("username"));
+				comment.setIdphoto(rs.getInt("idphoto"));
+				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
+				comment.setContent(rs.getString("content"));
+			}else {
+				throw new NotFoundException("There's no comment with idcomment="
+						+ idcomment);
+					}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -198,7 +246,8 @@ public class PhotoResource {
 	@Consumes(MediaType.PHOTO_API_COMENT)
 	@Produces(MediaType.PHOTO_API_COMENT)
 	public Coment updateComment (@QueryParam("idcomment") int idcomment, Coment comment){
-		
+
+		//validateUser(idcomment);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -233,5 +282,14 @@ public class PhotoResource {
 		
 		
 	}
+	
+	private void validateUser(int id) {
+	    Coment comment = getCommentFromDataBase(id);
+	    String username = comment.getUsername();
+		if (!security.getUserPrincipal().getName().equals(username))
+			throw new ForbiddenException(
+					"You are not allowed to modify or delete this comment.");
+	}
+
 	
 }
