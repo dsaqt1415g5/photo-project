@@ -10,7 +10,7 @@ create table Users (
 );
 
 create table Photos (
-	idphoto	int not null auto_increment primary key,
+	idphoto	varchar(36) not null primary key,
 	username varchar (50) not null,
 	autor varchar (50) not null,
 	file varchar (50) unique,
@@ -24,7 +24,7 @@ create table Photos (
 create table Comments (
 	idcomment int not null auto_increment primary key,
 	username varchar (50) not null,
-	idphoto int not null,
+	idphoto varchar(36) not null,
 	creationTimestamp timestamp not null,
 	content varchar(500) not null,
 	foreign key (username) references Users(username) on delete cascade,
@@ -39,7 +39,7 @@ create table Categories(
 
 create table RelationPhotoCategory (
 	primary key  (idphoto, idcategory),
-	idphoto int not null,
+	idphoto varchar(36) not null,
 	idcategory int not null,
 	foreign key (idphoto) references Photos(idphoto) on delete cascade,
 	foreign key (idcategory) references Categories(idcategory) on delete cascade
@@ -55,7 +55,7 @@ create table Albums (
 
 create table RelationPhotoAlbum (
 	primary key  (idphoto, idalbum),
-	idphoto int not null,
+	idphoto varchar(36) not null,
 	idalbum int not null,
 	foreign key (idphoto) references Photos(idphoto) on delete cascade,
 	foreign key (idalbum) references Albums(idalbum) on delete cascade

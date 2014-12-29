@@ -2,18 +2,27 @@ package edu.upc.eetac.dsa.abaena.photo.api.model;
 
 public class Photo {
 	
-	private int idphoto;
+	private String idphoto;
 	private String user;
 	private String autor;
 	private String file;
 	private String name;
 	private String description; 
 	private long timestamp;
+	private String photoURL;
 	
-	public int getIdphoto() {
+	
+	
+	public String getPhotoURL() {
+		return photoURL;
+	}
+	public void setPhotoURL(String photoURL) {
+		this.photoURL = photoURL;
+	}
+	public String getIdphoto() {
 		return idphoto;
 	}
-	public void setIdphoto(int idphoto) {
+	public void setIdphoto(String idphoto) {
 		this.idphoto = idphoto;
 	}
 

@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import edu.upc.eetac.dsa.abaena.photo.api.DataSourceSPA;
-import edu.upc.eetac.dsa.abaena.photo.api.MediaType;
+import edu.upc.eetac.dsa.abaena.photo.api.MediaType2;
 import edu.upc.eetac.dsa.abaena.photo.api.model.User;
 
 @Path("/users")
@@ -38,7 +38,7 @@ public class UserResource {
 	
 	@GET
 	@Path("/{username}")
-	@Produces(MediaType.PHOTO_API_USER)
+	@Produces(MediaType2.PHOTO_API_USER)
 	public User getUser(@PathParam("username") String username) {
 
 		User user = new User();
@@ -83,8 +83,8 @@ public class UserResource {
 
 	@Path("/login")
 	@POST
-	@Consumes(MediaType.PHOTO_API_USER)
-	@Produces(MediaType.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	@Produces(MediaType2.PHOTO_API_USER)
 	public User CreateUser(User user) {
 
 		Connection conn = null;
@@ -192,8 +192,8 @@ public class UserResource {
 	
 	@PUT
 	@Path("/{username}")
-	@Consumes(MediaType.PHOTO_API_USER)
-	@Produces(MediaType.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	@Produces(MediaType2.PHOTO_API_USER)
 	public User updateUser(@PathParam("username") String username, User user) {
 	
 	
