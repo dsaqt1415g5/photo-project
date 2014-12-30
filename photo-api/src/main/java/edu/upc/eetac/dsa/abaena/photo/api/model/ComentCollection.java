@@ -7,7 +7,7 @@ import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
 import org.glassfish.jersey.linking.InjectLinks;
 
-import edu.upc.eetac.dsa.abaena.photo.api.MediaType;
+import edu.upc.eetac.dsa.abaena.photo.api.MediaType2;
 
 public class ComentCollection {
 	
