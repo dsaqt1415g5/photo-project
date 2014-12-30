@@ -4,7 +4,7 @@ public class Coment {
 	
 	private int idcomment;
 	private String username;
-	private int idphoto;
+	private String idphoto;
 	private long creationTimestamp;
 	private String content;
 	
@@ -28,10 +28,10 @@ public class Coment {
 		this.idcomment = idcomment;
 	}
 
-	public int getIdphoto() {
+	public String getIdphoto() {
 		return idphoto;
 	}
-	public void setIdphoto(int idphoto) {
+	public void setIdphoto(String idphoto) {
 		this.idphoto = idphoto;
 	}
 

@@ -62,7 +62,7 @@ public class PhotoResource {
 	
 	@GET
 	@Produces(MediaType2.PHOTO_API_COMENT_COLLECTION)
-	public ComentCollection getCommentCollectionByIdPhoto(@QueryParam("idphoto") int idphoto){
+	public ComentCollection getCommentCollectionByIdPhoto(@QueryParam("idphoto") String idphoto){
 		
 		ComentCollection comments = new ComentCollection();
 		
@@ -76,13 +76,13 @@ public class PhotoResource {
 		PreparedStatement stmt = null;
 		try{
 			stmt = conn.prepareStatement(GET_COMMENTS_BY_IDPHOTO);
-			stmt.setInt(1, idphoto);
+			stmt.setString(1, idphoto);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				Coment comment = new Coment();
 				comment.setIdcomment(rs.getInt("idcomment"));
 				comment.setUsername(rs.getString("username"));
-				comment.setIdphoto(rs.getInt("idphoto"));
+				comment.setIdphoto(rs.getString("idphoto"));
 				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));	
 				comments.addComment(comment);
@@ -120,7 +120,7 @@ public class PhotoResource {
 			stmt = conn.prepareStatement(INSERT_COMMENT,Statement.RETURN_GENERATED_KEYS);
 			
 			stmt.setString(1, comment.getUsername());
-			stmt.setInt(2, comment.getIdphoto());
+			stmt.setString(2, comment.getIdphoto());
 			stmt.setString(3, comment.getContent());
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -197,7 +197,7 @@ public class PhotoResource {
 			if (rs.next()) {
 				comment.setIdcomment(rs.getInt("idcomment"));
 				comment.setUsername(rs.getString("username"));
-				comment.setIdphoto(rs.getInt("idphoto"));
+				comment.setIdphoto(rs.getString("idphoto"));
 				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));
 			}else {
@@ -238,7 +238,7 @@ public Coment getCommentFromDataBase(int idcomment){
 			if (rs.next()) {
 				comment.setIdcomment(rs.getInt("idcomment"));
 				comment.setUsername(rs.getString("username"));
-				comment.setIdphoto(rs.getInt("idphoto"));
+				comment.setIdphoto(rs.getString("idphoto"));
 				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));
 			}else {
