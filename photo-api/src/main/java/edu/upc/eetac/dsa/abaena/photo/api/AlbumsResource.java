@@ -34,7 +34,7 @@ public class AlbumsResource {
 	private String GET_ALBUMS_BY_USERNAME="select * from albums where username=?";
 	private String INSERT_ALBUM="insert into Albums (nombre, description, username) values (?,?,?)";
 	private String DELETE_ALBUM_QUERY="delete from Albums where idalbum = ?";
-	private String EDITAR_ALBUM = "update Albums set nombre=ifnull(?,nombre), description=ifnull(?,description) where username=?";
+	private String EDITAR_ALBUM = "update Albums set nombre=ifnull(?,nombre), description=ifnull(?,description) where idalbum=?";
 	private String GET_ALBUM_BY_ID = "select * from Albums where idalbum=?";
 	
 	@Context
@@ -157,10 +157,9 @@ public class AlbumsResource {
 	
 	
 	@PUT
-	@Path("/{idalbum}")
 	@Consumes(MediaType2.PHOTO_API_ALBUM)
 	@Produces(MediaType2.PHOTO_API_ALBUM)
-	public Albums updateAlbum (@PathParam("idalbum") String idalbum, Albums album){
+	public Albums updateAlbum (@QueryParam("idalbum") String idalbum, Albums album){
 		
 		Connection conn = null;
 		try {
