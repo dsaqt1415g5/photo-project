@@ -15,6 +15,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.ServerErrorException;
@@ -27,6 +28,9 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.Coment;
 import edu.upc.eetac.dsa.abaena.photo.api.model.ComentCollection;
 import edu.upc.eetac.dsa.abaena.photo.api.model.Photo;
 import edu.upc.eetac.dsa.abaena.photo.api.model.PhotoCollection;
+
+
+
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -59,6 +63,54 @@ public class PhotoResource {
 	@Context
 	private Application app;
 	private SecurityContext security;
+	
+	
+
+	@GET
+	@Path("/{username}")
+	public PhotoCollection getImages(@PathParam("username") String username) {
+		PhotoCollection images = new PhotoCollection();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("select * from photos where username=?");
+			stmt.setString(1, username);
+			stmt.executeQuery();
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Photo image = new Photo();
+				image.setIdphoto(rs.getString("idphoto") + ".png");
+				image.setUser(rs.getString("username"));
+				image.setAutor(rs.getString("autor"));
+				image.setFile(rs.getString("file"));
+				image.setName(rs.getString("name"));
+				image.setDescription(rs.getString("description"));
+				image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				image.setPhotoURL(app.getProperties().get("imgBaseURL")+ image.getFile());
+				images.addPhoto(image);
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+				} catch (SQLException e) {				
+			}
+		}
+		return images;
+	}
 	
 	@GET
 	@Produces(MediaType2.PHOTO_API_COMENT_COLLECTION)
@@ -218,7 +270,7 @@ public class PhotoResource {
 	 
 		return comment;
 		
-	}
+	} 
 	
 public Coment getCommentFromDataBase(int idcomment){
 		
@@ -343,6 +395,8 @@ public Coment getCommentFromDataBase(int idcomment){
 			stmt.setString(4, name);
 			stmt.setString(5, description);
 			stmt.executeUpdate();
+			
+			
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
@@ -356,8 +410,6 @@ public Coment getCommentFromDataBase(int idcomment){
 		}
 		Photo imageData = new Photo();
 		imageData.setIdphoto(uuid.toString() + ".png");
-
-
 		return imageData;
 	}
 	
@@ -386,5 +438,4 @@ public Coment getCommentFromDataBase(int idcomment){
 	
 	
 
-	
 }
