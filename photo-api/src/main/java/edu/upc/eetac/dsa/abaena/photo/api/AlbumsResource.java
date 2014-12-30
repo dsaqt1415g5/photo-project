@@ -41,7 +41,7 @@ public class AlbumsResource {
 	private SecurityContext security;
 	
 	@GET
-	@Consumes(MediaType.PHOTO_API_ALBUM_COLLECTION)
+	@Consumes(MediaType2.PHOTO_API_ALBUM_COLLECTION)
 	public AlbumsCollection getAlbumsCollection(@QueryParam("username") String username){
 		
 		AlbumsCollection albums = new AlbumsCollection();
@@ -83,8 +83,8 @@ public class AlbumsResource {
 	}
 	
 	@POST
-	@Consumes(MediaType.PHOTO_API_ALBUM)
-	@Produces(MediaType.PHOTO_API_ALBUM)
+	@Consumes(MediaType2.PHOTO_API_ALBUM)
+	@Produces(MediaType2.PHOTO_API_ALBUM)
 	public Albums createAlbum (Albums album){
 		
 		Connection conn = null;

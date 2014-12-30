@@ -25,6 +25,25 @@ import javax.ws.rs.core.SecurityContext;
 import edu.upc.eetac.dsa.abaena.photo.api.DataSourceSPA;
 import edu.upc.eetac.dsa.abaena.photo.api.model.Coment;
 import edu.upc.eetac.dsa.abaena.photo.api.model.ComentCollection;
+import edu.upc.eetac.dsa.abaena.photo.api.model.Photo;
+import edu.upc.eetac.dsa.abaena.photo.api.model.PhotoCollection;
+
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
+
+
+
 
 @Path("/photos")
 public class PhotoResource {
@@ -38,10 +57,11 @@ public class PhotoResource {
 	private String UPDATE_COMMENT_QUERY="update comments set content=ifnull(?,content) where idcomment = ?";
 	
 	@Context
+	private Application app;
 	private SecurityContext security;
 	
 	@GET
-	@Produces(MediaType.PHOTO_API_COMENT_COLLECTION)
+	@Produces(MediaType2.PHOTO_API_COMENT_COLLECTION)
 	public ComentCollection getCommentCollectionByIdPhoto(@QueryParam("idphoto") int idphoto){
 		
 		ComentCollection comments = new ComentCollection();
@@ -83,8 +103,8 @@ public class PhotoResource {
 	}
 	
 	@POST
-	@Consumes(MediaType.PHOTO_API_COMENT)
-	@Produces(MediaType.PHOTO_API_COMENT)
+	@Consumes(MediaType2.PHOTO_API_COMENT)
+	@Produces(MediaType2.PHOTO_API_COMENT)
 	public Coment createComent(Coment comment){
 
 		Connection conn = null;
@@ -158,7 +178,7 @@ public class PhotoResource {
 	}
 	
 	@GET
-	@Produces(MediaType.PHOTO_API_COMENT)
+	@Produces(MediaType2.PHOTO_API_COMENT)
 	public Coment getComment(@QueryParam("idcomment") int idcomment){
 		
 		Coment comment =new Coment();
@@ -243,8 +263,8 @@ public Coment getCommentFromDataBase(int idcomment){
 	
 	
 	@PUT
-	@Consumes(MediaType.PHOTO_API_COMENT)
-	@Produces(MediaType.PHOTO_API_COMENT)
+	@Consumes(MediaType2.PHOTO_API_COMENT)
+	@Produces(MediaType2.PHOTO_API_COMENT)
 	public Coment updateComment (@QueryParam("idcomment") int idcomment, Coment comment){
 
 		//validateUser(idcomment);
@@ -290,6 +310,81 @@ public Coment getCommentFromDataBase(int idcomment){
 			throw new ForbiddenException(
 					"You are not allowed to modify or delete this comment.");
 	}
+	
+	
+	
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Photo uploadImage(@FormDataParam("idphoto") String idphoto,
+			@FormDataParam("username") String username,
+			@FormDataParam("autor") String autor,
+			@FormDataParam("name") String name,
+			@FormDataParam("description") String description,
+			@FormDataParam("image") InputStream image,
+			@FormDataParam("image") FormDataContentDisposition fileDisposition) {
+		UUID uuid = writeAndConvertImage(image);
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("insert into Photos (idphoto, "
+					+ "username, autor, name, description) "
+					+ "values(?,?,?,?,?)");
+			
+			stmt.setString(1, uuid.toString());
+			stmt.setString(2, username);
+			stmt.setString(3, autor);
+			stmt.setString(4, name);
+			stmt.setString(5, description);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		Photo imageData = new Photo();
+		imageData.setIdphoto(uuid.toString() + ".png");
+
+
+		return imageData;
+	}
+	
+	private UUID writeAndConvertImage(InputStream file) {
+
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(file);
+
+		} catch (IOException e) {
+			throw new InternalServerErrorException(
+					"Something has been wrong when reading the file.");
+		}
+		UUID uuid = UUID.randomUUID();
+		String filename = uuid.toString() + ".png";
+		try {
+			ImageIO.write(image,"png",new File(app.getProperties().get("uploadFolder") + filename));
+			
+		} catch (IOException e) {
+			throw new InternalServerErrorException(
+					"Something has been wrong when converting the file.");
+		}
+
+		return uuid;
+	}
+	
+	
 
 	
 }

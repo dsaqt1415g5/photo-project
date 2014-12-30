@@ -33,7 +33,7 @@ public class CategoriesResource {
 	private String GET_CATEGORIES = "Select * from Categories";
 	
 	@GET
-	@Produces(MediaType.PHOTO_API_CATEGORIES_COLLECTION)
+	@Produces(MediaType2.PHOTO_API_CATEGORIES_COLLECTION)
 	public CategoriesCollection getCategoriesCollection(String nombre){
 		
 		CategoriesCollection categories = new CategoriesCollection();
