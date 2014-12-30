@@ -158,8 +158,8 @@ public class AlbumsResource {
 	
 	@PUT
 	@Path("/{idalbum}")
-	@Consumes(MediaType.PHOTO_API_ALBUM)
-	@Produces(MediaType.PHOTO_API_ALBUM)
+	@Consumes(MediaType2.PHOTO_API_ALBUM)
+	@Produces(MediaType2.PHOTO_API_ALBUM)
 	public Albums updateAlbum (@PathParam("idalbum") String idalbum, Albums album){
 		
 		Connection conn = null;
