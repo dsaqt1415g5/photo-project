@@ -59,6 +59,7 @@ public class PhotoResource {
 	private String DELETE_COMMENT_QUERY ="delete from comments where idcomment = ?";
 	private String GET_COMMENT_BY_ID="Select * from comments where idcomment=?";
 	private String UPDATE_COMMENT_QUERY="update comments set content=ifnull(?,content) where idcomment = ?";
+	private String UPDATE_PHOTO_QUERY="update photos set description=ifnull(?,description) where idphoto=?";
 	
 	@Context
 	private Application app;
@@ -355,6 +356,44 @@ public Coment getCommentFromDataBase(int idcomment){
 		
 	}
 	
+	
+	@PUT
+	@Consumes(MediaType2.PHOTO_API_PHOTO)
+	@Produces(MediaType2.PHOTO_API_PHOTO)
+	public Photo updatePhoto (@QueryParam("idphoto") String idphoto, Photo photo){
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(UPDATE_PHOTO_QUERY);
+			
+			stmt.setString(1, photo.getDescription());
+			stmt.setString(2, idphoto);
+			int rows = stmt.executeUpdate();
+
+			
+			
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+		return photo;
+	}
+	
 	private void validateUser(int id) {
 	    Coment comment = getCommentFromDataBase(id);
 	    String username = comment.getUsername();
@@ -412,6 +451,8 @@ public Coment getCommentFromDataBase(int idcomment){
 		imageData.setIdphoto(uuid.toString() + ".png");
 		return imageData;
 	}
+	
+	
 	
 	private UUID writeAndConvertImage(InputStream file) {
 
