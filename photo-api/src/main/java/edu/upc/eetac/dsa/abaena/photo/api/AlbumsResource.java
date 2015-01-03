@@ -10,8 +10,11 @@ import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.ServerErrorException;
@@ -21,6 +24,8 @@ import javax.ws.rs.core.SecurityContext;
 
 import edu.upc.eetac.dsa.abaena.photo.api.model.Albums;
 import edu.upc.eetac.dsa.abaena.photo.api.model.AlbumsCollection;
+import edu.upc.eetac.dsa.abaena.photo.api.model.User;
+
 
 @Path("/albums")
 public class AlbumsResource {
@@ -29,6 +34,9 @@ public class AlbumsResource {
 	private String GET_ALBUMS_BY_USERNAME="select * from albums where username=?";
 	private String INSERT_ALBUM="insert into Albums (nombre, description, username) values (?,?,?)";
 	private String DELETE_ALBUM_QUERY="delete from Albums where idalbum = ?";
+	private String EDITAR_ALBUM = "update Albums set nombre=ifnull(?,nombre), description=ifnull(?,description) where idalbum=?";
+	private String GET_ALBUM_BY_ID = "select * from Albums where idalbum=?";
+	
 	@Context
 	private SecurityContext security;
 	
@@ -147,4 +155,102 @@ public class AlbumsResource {
 		
 	}
 	
-}
+	
+	@PUT
+	@Consumes(MediaType2.PHOTO_API_ALBUM)
+	@Produces(MediaType2.PHOTO_API_ALBUM)
+	public Albums updateAlbum (@QueryParam("idalbum") String idalbum, Albums album){
+		
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		
+		PreparedStatement stmt = null;
+		try {
+					
+			stmt = conn.prepareStatement(EDITAR_ALBUM);
+		
+			stmt.setString(1, album.getNombre());
+			stmt.setString(2, album.getDescription());
+			stmt.setInt(3,Integer.valueOf( idalbum));
+	 
+			int rows = stmt.executeUpdate();
+			
+			if (rows == 1)
+				
+				album = getAlbumFromDataBase(idalbum);
+			else {
+				throw new NotFoundException("No existe ningún álbum con este id = "
+						+ idalbum);
+			}
+	 
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+			
+		}
+		return album;
+		
+		
+	}
+	
+	private Albums getAlbumFromDataBase (String idalbum){
+		
+		Albums album = new Albums();
+		 
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+
+		}
+		
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_ALBUM_BY_ID);
+			stmt.setInt(1, Integer.valueOf(idalbum));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				album.setIdalbum(rs.getInt("idalbum"));
+				album.setUsername(rs.getString("username"));
+				album.setNombre(rs.getString("nombre"));
+				album.setDescription(rs.getString("description"));
+			
+			}
+			
+		
+		else {
+			throw new NotFoundException("No existe ningún álbum con este ID = "
+			+ idalbum);
+			}
+	} catch (SQLException e) {
+		throw new ServerErrorException(e.getMessage(),
+				Response.Status.INTERNAL_SERVER_ERROR);
+	} finally {
+		try {
+			if (stmt != null)
+				stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+		}
+	}
+ 
+	return album;
+		}
+	
+	}
+	
+
