@@ -69,7 +69,7 @@ public class PhotoResource {
 	
 
 	@GET
-	@Path("/{username}")
+	@Path("/user/{username}")
 	public PhotoCollection getImages(@PathParam("username") String username) {
 		PhotoCollection images = new PhotoCollection();
 
@@ -84,7 +84,7 @@ public class PhotoResource {
 		PreparedStatement stmt = null;
 		try {
 			stmt = conn.prepareStatement("select * from photos where username=?");
-			stmt.setString(1, username);
+			stmt.setString(1,username);
 			stmt.executeQuery();
 
 			ResultSet rs = stmt.executeQuery();
@@ -113,6 +113,134 @@ public class PhotoResource {
 		}
 		return images;
 	}
+	
+	
+	
+	@GET
+	@Path("/title/{name}")
+	public PhotoCollection getImagesByName(@PathParam("name") String name) {
+		PhotoCollection images = new PhotoCollection();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("select * from photos where name like ?");
+			stmt.setString(1,"%" + name + "%");
+			stmt.executeQuery();
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Photo image = new Photo();
+				image.setIdphoto(rs.getString("idphoto") + ".png");
+				image.setUser(rs.getString("username"));
+				image.setAutor(rs.getString("autor"));
+				image.setFile(rs.getString("file"));
+				image.setName(rs.getString("name"));
+				image.setDescription(rs.getString("description"));
+				image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				image.setPhotoURL(app.getProperties().get("imgBaseURL")+ image.getFile());
+				images.addPhoto(image);
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+				} catch (SQLException e) {				
+			}
+		}
+		return images;
+	}
+	
+	
+	/*
+	*/
+	
+	
+	@GET
+	@Path("/category/{category}")
+	public PhotoCollection getImagesByCategory(@PathParam("category") String category) {
+		PhotoCollection images = new PhotoCollection();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("select * from photos where idphoto IN "
+					+ "(select idphoto from relationphotocategory where idcategory IN "
+					+ "( select idcategory from categories where nombre like ?));");
+			stmt.setString(1,"%" + category + "%");
+			stmt.executeQuery();
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Photo image = new Photo();
+				image.setIdphoto(rs.getString("idphoto") + ".png");
+				image.setUser(rs.getString("username"));
+				image.setAutor(rs.getString("autor"));
+				image.setFile(rs.getString("file"));
+				image.setName(rs.getString("name"));
+				image.setDescription(rs.getString("description"));
+				image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				image.setPhotoURL(app.getProperties().get("imgBaseURL")+ image.getFile());
+				images.addPhoto(image);
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+				} catch (SQLException e) {				
+			}
+		}
+		return images;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@GET
 	@Produces(MediaType2.PHOTO_API_COMENT_COLLECTION)
