@@ -1,6 +1,35 @@
 package edu.upc.eetac.dsa.abaena.photo.api.model;
 
+import java.util.List;
+
+import javax.ws.rs.core.Link;
+import javax.ws.rs.core.MediaType;
+
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
+import org.glassfish.jersey.linking.InjectLink.Style;
+
+import edu.upc.eetac.dsa.abaena.photo.api.MediaType2;
+import edu.upc.eetac.dsa.abaena.photo.api.PhotoResource;
+
 public class Photo {
+	
+	@InjectLinks({
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="photos", title="photo collection", type = MediaType.MULTIPART_FORM_DATA),
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="self edit", title="Photo", type = MediaType.MULTIPART_FORM_DATA, method="getPhoto", bindings=@Binding(name ="idphoto", value="${instance.idphoto}")),
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="photo comments", title="Coments", type=MediaType2.PHOTO_API_COMENT_COLLECTION, method="getCommentCollectionByIdPhoto", bindings=@Binding(name="idphoto", value="${instance.idphoto}"))
+	})
+	
+	private List<Link> links; //lista de atributos
+	 
+	public List<Link> getLinks() {
+		return links;
+	}
+ 
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
 	
 	private String idphoto;
 	private String user;

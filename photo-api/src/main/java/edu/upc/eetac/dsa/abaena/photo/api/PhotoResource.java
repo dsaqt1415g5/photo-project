@@ -215,33 +215,6 @@ public class PhotoResource {
 		return images;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@GET
 	@Produces(MediaType2.PHOTO_API_COMENT_COLLECTION)
 	public ComentCollection getCommentCollectionByIdPhoto(@QueryParam("idphoto") String idphoto){
