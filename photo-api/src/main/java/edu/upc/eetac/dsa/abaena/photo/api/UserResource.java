@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,6 +22,8 @@ import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import edu.upc.eetac.dsa.abaena.photo.api.DataSourceSPA;
 import edu.upc.eetac.dsa.abaena.photo.api.MediaType2;
@@ -230,6 +233,7 @@ public class UserResource {
 		} catch (SQLException e) {
 		}
 	}
+
 	user.setPassword(null);
 	return user;
 }
@@ -280,6 +284,64 @@ public class UserResource {
 	public String buildGetUserByUsername() {
 		return "SELECT *FROM Users WHERE username=?";
 	}
+	
+	@Path("/register")
+	@POST
+	@Produces(MediaType2.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	public User register(User user) {
+		if (user.getUsername() == null || user.getPassword() == null)
+			throw new BadRequestException(
+					"El nombre de usuario y contraseña no pueden ser null");
+ 
+		String pwdDigest = DigestUtils.md5Hex(user.getPassword());
+		String storedPwd = getUserFromDatabase(user.getUsername(), true)
+				.getPassword();
+ 
+		//user.setRegisterSuccessful(pwdDigest.equals(storedPwd));
+		user.setPassword(null);
+		return user;
+	
+	}
+ 
+	private User getUserFromDatabase(String username, boolean password) {
+		User user = new User();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("No se puede conectar a la base de datos ",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+ 
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USER_BY_USERNAME);
+			stmt.setString(1, username);
+ 
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				user.setUsername(rs.getString("username"));
+				if (password)
+					user.setPassword(rs.getString("password"));
+			
+			} else
+				throw new NotFoundException(username + " no encontrado. ");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+ 
+		return user;
+	}
+	
 	
 }
 	

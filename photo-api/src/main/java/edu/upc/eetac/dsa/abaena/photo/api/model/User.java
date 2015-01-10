@@ -6,9 +6,16 @@ public class User {
 	private String username;
 	private String password;
 	private int avatar;
+	private boolean RegisterSuccessful;
 	
 	
 
+	public boolean isRegisterSuccessful() {
+		return RegisterSuccessful;
+	}
+	public void setRegisterSuccessful(boolean registerSuccessful) {
+		RegisterSuccessful = registerSuccessful;
+	}
 	public String getUsername() {
 		return username;
 	}
