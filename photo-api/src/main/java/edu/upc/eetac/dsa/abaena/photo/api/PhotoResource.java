@@ -113,7 +113,50 @@ public class PhotoResource {
 		}
 		return images;
 	}
-	
+	@GET
+	@Path("/photo/{idphoto}")
+	public Photo getImagen(@PathParam("idphoto") String idphoto) {
+		Photo imagen = new Photo();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("select * from photos where idphoto=?");
+			stmt.setString(1,idphoto);
+			stmt.executeQuery();
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				imagen.setIdphoto(rs.getString("idphoto") + ".png");
+				imagen.setUser(rs.getString("username"));
+				imagen.setAutor(rs.getString("autor"));
+				imagen.setFile(rs.getString("file"));
+				imagen.setName(rs.getString("name"));
+				imagen.setDescription(rs.getString("description"));
+				imagen.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				imagen.setPhotoURL(app.getProperties().get("imgBaseURL")+ imagen.getFile());
+				
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+				} catch (SQLException e) {				
+			}
+		}
+		return imagen;
+	}
 	
 	
 	@GET
