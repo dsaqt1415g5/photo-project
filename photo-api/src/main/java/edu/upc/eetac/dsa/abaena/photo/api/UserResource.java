@@ -84,7 +84,7 @@ public class UserResource {
 		return user;
 	}
 
-	@Path("/login")
+	@Path("/register")
 	@POST
 	@Consumes(MediaType2.PHOTO_API_USER)
 	@Produces(MediaType2.PHOTO_API_USER)
@@ -285,7 +285,7 @@ public class UserResource {
 		return "SELECT *FROM Users WHERE username=?";
 	}
 	
-	@Path("/register")
+	@Path("/login")
 	@POST
 	@Produces(MediaType2.PHOTO_API_USER)
 	@Consumes(MediaType2.PHOTO_API_USER)
