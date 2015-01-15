@@ -32,7 +32,7 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.User;
 @Path("/users")
 public class UserResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
-
+	private final static String GET_USER_BY_USER = "select * from users where username=? and password=?";
 	private final static String GET_USER_BY_USERNAME = "Select * from Users where username=?";
 	private final static String INSERT_USER_INTO_USERS = "insert into Users (username, password, avatar) values(?, MD5(?), null)";
 	private final static String DELETE_USER = "Delete from Users where username=? ";
@@ -285,26 +285,32 @@ public class UserResource {
 		return "SELECT *FROM Users WHERE username=?";
 	}
 	
-	@Path("/login")
-	@POST
+	
+
+	@Path("/login/{username}/{password}")
+	@GET
 	@Produces(MediaType2.PHOTO_API_USER)
 	@Consumes(MediaType2.PHOTO_API_USER)
-	public User register(User user) {
-		if (user.getUsername() == null || user.getPassword() == null)
+	public User login(@PathParam("username") String username,
+			@PathParam("password") String password) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		
+		if (username == null || password == null)
 			throw new BadRequestException(
 					"El nombre de usuario y contraseña no pueden ser null");
  
-		String pwdDigest = DigestUtils.md5Hex(user.getPassword());
-		String storedPwd = getUserFromDatabase(user.getUsername(), true)
-				.getPassword();
- 
-		//user.setRegisterSuccessful(pwdDigest.equals(storedPwd));
+		String pwdDigest = DigestUtils.md5Hex(password);
+		User storedPwd = getUserFromDatabase(username, password);
+
+		user.setRegisterSuccessful(pwdDigest.equals(storedPwd));
 		user.setPassword(null);
 		return user;
 	
 	}
  
-	private User getUserFromDatabase(String username, boolean password) {
+	private User getUserFromDatabase(String username, String password) {
 		User user = new User();
 		Connection conn = null;
 		try {
@@ -316,15 +322,14 @@ public class UserResource {
  
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement(GET_USER_BY_USERNAME);
+			stmt = conn.prepareStatement(GET_USER_BY_USER);
 			stmt.setString(1, username);
+			stmt.setString(2, password);
  
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				user.setUsername(rs.getString("username"));
-				if (password)
-					user.setPassword(rs.getString("password"));
-			
+				user.setPassword(rs.getString("password"));
 			} else
 				throw new NotFoundException(username + " no encontrado. ");
 		} catch (SQLException e) {
@@ -341,6 +346,9 @@ public class UserResource {
  
 		return user;
 	}
+	
+	
+	
 	
 	
 	@Path("/follow/{username}/{followed}")
