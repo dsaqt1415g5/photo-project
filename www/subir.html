@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+	
+	<title>TwickPic</title>
+	<link rel="shortcut icon" type="image/gif" href="img/logo.gif" />
+
+    <!-- Bootstrap CSS -->
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<!-- Bootstrap theme -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css" rel="stylesheet">
+	
+	<script src="js/ie-emulation-modes-warning.js"></script>
+
+		  <style type="text/css">
+
+			*
+			body {
+				padding-bottom: 40px;
+				background-color: #F0F8FF;
+						}
+			{
+				margin:0px;
+				padding:0px;
+			}
+			
+			#header {
+				margin:auto;
+				width:700px;
+				font-family:Arial, Helvetica, sans-serif;
+			}
+			
+			ul, ol {
+				list-style:none;
+			}
+			
+			.nav > li {
+				float:left;
+			}
+			
+			.nav li a {
+				background-color:#000;
+				color:#fff;
+				text-decoration:none;
+				padding:15px 16px;
+				display:block;
+			}
+			
+			.nav li a:hover {
+				background-color:#434343;
+			}
+			
+			.nav li ul {
+				display:none;
+				position:absolute;
+				min-width:140px;
+			}
+			
+			.nav li:hover > ul {
+				display:block;
+			}
+			
+			.nav li ul li {
+				position:relative;
+			}
+			
+			.nav li ul li ul {
+				right:-140px;
+				top:0px;
+			}
+		</style>
+  </head>
+  
+  <body>
+    
+      <div class="container">
+	  
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">TwickPic</a>
+            </div>
+			<div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav ">
+			    <li><a href="main.html">Main</a></li>
+				<li><a href="">Services</a>
+					<ul>
+						<li><a id=myprofile href="profile.html">My Profile</a></li>
+						<li><a id=logout  href="login.html">Log Out</a></li>
+						<li><a id=aboutus href="/login.html">About Us</a></li>
+					</ul>
+				</li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+	  </div>
+		
+		<div class="container">
+			<h1 class="text-center">Not Jersey Multipart Example</h1>
+		</div>
+		</br>
+		<div class="container">
+			<div class="col-md-8">
+			<form  id="imageformunico" class="form-horizontal col-md-6" role="form" >
+					<legend>Upload image</legend>
+					<div class="form-group">
+						<label for="inputTitle">Username</label>
+						<input name="username" type="text" id="username" class="form-control" placeholder="Enter image title" required="required">
+					</div>
+					<div class="form-group">
+						<label for="inputTitle">Autor</label>
+						<input name="autor" type="text" id="autor" class="form-control" placeholder="Enter image title" required="required">
+					</div>
+					
+					<div class="form-group">
+						<label for="inputTitle">Titulo</label>
+						<input name="name" type="text" id="name" class="form-control" placeholder="Enter image title" required="required">
+					</div>
+					<div class="form-group">
+						<label for="inputTitle">Descripcion</label>
+						<input name="description" type="text" id="description" class="form-control" placeholder="Enter image title" required="required">
+					</div>
+					<div class="form-group">	
+						<label for="inputFile">Image</label>
+						<input name="image" type="file" id="image" required="required">
+					</div>
+					<button id="uploadimageButton" type="submit" class="btn btn-default">Upload</button>
+					<progress style="display: none;"></progress>
+			</form>
+			</div>
+
+			<div class="col-md-6">
+				<a>
+					<img id="uploadedImage" class="img-responsive">
+				</a>
+			</div>
+		</div>
+		
+		
+		
+	  </div>
+	
+  </body>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<!-- jQuery -->
+	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+	<!-- Example JS -->
+	<script src="js/subirfoto.js"></script>
+	<script src="js/jquery.cookie.js"></script>
+	
+</html>
+	

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,6 +23,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import edu.upc.eetac.dsa.abaena.photo.api.DataSourceSPA;
 import edu.upc.eetac.dsa.abaena.photo.api.MediaType2;
 import edu.upc.eetac.dsa.abaena.photo.api.model.User;
@@ -29,12 +32,12 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.User;
 @Path("/users")
 public class UserResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
-
+	private final static String GET_USER_BY_USER = "select * from users where username=? and password=?";
 	private final static String GET_USER_BY_USERNAME = "Select * from Users where username=?";
 	private final static String INSERT_USER_INTO_USERS = "insert into Users (username, password, avatar) values(?, MD5(?), null)";
 	private final static String DELETE_USER = "Delete from Users where username=? ";
 	private final static String UPDATE_USER = "update Users set password=ifnull(?,password) where username=?";
-	
+	private final static String INSERT_FOLLOW = "insert into relacionuserfollows (username, followed) values (?,?)";
 	
 	@GET
 	@Path("/{username}")
@@ -81,7 +84,7 @@ public class UserResource {
 		return user;
 	}
 
-	@Path("/login")
+	@Path("/register")
 	@POST
 	@Consumes(MediaType2.PHOTO_API_USER)
 	@Produces(MediaType2.PHOTO_API_USER)
@@ -230,6 +233,7 @@ public class UserResource {
 		} catch (SQLException e) {
 		}
 	}
+
 	user.setPassword(null);
 	return user;
 }
@@ -280,6 +284,139 @@ public class UserResource {
 	public String buildGetUserByUsername() {
 		return "SELECT *FROM Users WHERE username=?";
 	}
+	
+	
+
+	@Path("/login/{username}/{password}")
+	@GET
+	@Produces(MediaType2.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	public User login(@PathParam("username") String username,
+			@PathParam("password") String password) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		
+		if (username == null || password == null)
+			throw new BadRequestException(
+					"El nombre de usuario y contraseña no pueden ser null");
+ 
+		String pwdDigest = DigestUtils.md5Hex(password);
+		User storedPwd = getUserFromDatabase(username, password);
+
+		user.setRegisterSuccessful(pwdDigest.equals(storedPwd));
+		user.setPassword(null);
+		return user;
+	
+	}
+ 
+	private User getUserFromDatabase(String username, String password) {
+		User user = new User();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("No se puede conectar a la base de datos ",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+ 
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USER_BY_USER);
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+ 
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+			} else
+				throw new NotFoundException(username + " no encontrado. ");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+ 
+		return user;
+	}
+	
+	
+	
+	
+	
+	@Path("/follow/{username}/{followed}")
+	@POST
+	@Produces(MediaType2.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	public User FollowUuser(@PathParam("username") String username,@PathParam("followed") String followed) {
+		
+		User userfollowed = new User();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmtGetFollowed = null;
+		PreparedStatement stmtInsertFollowed = null;
+
+		try {
+			stmtGetFollowed = conn.prepareStatement(GET_USER_BY_USERNAME);
+			stmtGetFollowed.setString(1, followed);
+			ResultSet rs = stmtGetFollowed.executeQuery();
+			
+			if (rs.next()) {
+				userfollowed.setUsername(rs.getString("username"));
+				userfollowed.setPassword(rs.getString("password"));
+				userfollowed.setAvatar(rs.getInt("avatar"));
+				
+				conn.setAutoCommit(false);// desactivamos las confirmaciones
+				// automaticas
+
+				stmtInsertFollowed = conn.prepareStatement(INSERT_FOLLOW);
+				stmtInsertFollowed.setString(1, username);
+				stmtInsertFollowed.setString(2, followed);
+				stmtInsertFollowed.executeUpdate();
+				conn.commit();
+				
+			} else
+				throw new NotFoundException(followed + " no encontrado. ");
+			} catch (SQLException e) {
+				throw new ServerErrorException(e.getMessage(),
+						Response.Status.INTERNAL_SERVER_ERROR);
+				} 
+		finally {
+			try {
+				if (stmtGetFollowed != null)
+					stmtGetFollowed.close();
+
+				if (stmtInsertFollowed != null)
+					stmtInsertFollowed.close();
+				conn.setAutoCommit(true);
+				conn.close();
+			} catch (SQLException e) {	
+				
+			}
+		}
+		return userfollowed;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 }
 	
