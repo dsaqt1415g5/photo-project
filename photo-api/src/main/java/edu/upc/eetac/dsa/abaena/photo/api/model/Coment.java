@@ -20,7 +20,7 @@ public class Coment {
 	@InjectLinks({
 		@InjectLink(resource = PhotoResource.class, style = Style.ABSOLUTE, rel ="comentarios", title="lista de comentarios", type=MediaType2.PHOTO_API_COMENT ),
 		@InjectLink(resource = PhotoResource.class, style = Style.ABSOLUTE, rel ="photo comment", title="apuntar foto", type=MediaType2.PHOTO_API_PHOTO),
-		@InjectLink(resource = PhotoResource.class, style = Style.ABSOLUTE, rel ="self edit", title="editar comentario", type=MediaType2.PHOTO_API_COMENT, method="updateComment", bindings=@Binding(name ="idcomment", value="${instance.idcomment}"))
+		@InjectLink(resource = PhotoResource.class, style = Style.ABSOLUTE, rel ="selfEdit", title="editar comentario",  method="getCommentFromDataBase", bindings=@Binding(name ="idcomment", value="${instance.idcomment}"))
 		})
 	
 	private List<Link> links; //lista de atributos

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="230dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:id="@+id/etSearch"
+                android:hint="Introduce el nombre de la foto"
+                android:layout_margin="20dip"/>
+
+
+            <Button
+                android:id="@+id/buscarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insert"
+                android:onClick="doSearch"
+                android:layout_alignBaseline="@+id/etSearch"
+                android:layout_toRightOf="@+id/etSearch"/>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

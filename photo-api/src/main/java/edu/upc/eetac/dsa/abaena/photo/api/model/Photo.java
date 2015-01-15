@@ -16,10 +16,13 @@ import edu.upc.eetac.dsa.abaena.photo.api.PhotoResource;
 public class Photo {
 	
 	@InjectLinks({
-		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="photos", title="photo collection", type = MediaType.MULTIPART_FORM_DATA),
-		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="self edit", title="Photo", type = MediaType.MULTIPART_FORM_DATA, method="getPhoto", bindings=@Binding(name ="idphoto", value="${instance.idphoto}")),
-		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="photo comments", title="Coments", type=MediaType2.PHOTO_API_COMENT_COLLECTION, method="getCommentCollectionByIdPhoto", bindings=@Binding(name="idphoto", value="${instance.idphoto}"))
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="photos", title="photo collection puntero", type = MediaType.MULTIPART_FORM_DATA),
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="selfPhoto", title="PhotoPuntero", type = MediaType.MULTIPART_FORM_DATA, method="getImagen", bindings=@Binding(name ="idphoto", value="${instance.idphoto}")),
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="urlPhoto", title="URL photo", type = MediaType.MULTIPART_FORM_DATA, method="getImagen", bindings=@Binding(name ="photoURL", value="${instance.photoURL}")),
+		@InjectLink(resource=PhotoResource.class, style = Style.ABSOLUTE, rel="photoComments", title="ComentsPuntero", type=MediaType2.PHOTO_API_COMENT_COLLECTION, method="getCommentCollectionByIdPhoto", bindings=@Binding(name="idphoto", value="${instance.idphoto}"))
 	})
+	
+	 
 	
 	private List<Link> links; //lista de atributos
 	 
