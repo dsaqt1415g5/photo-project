@@ -104,6 +104,48 @@ public class PhotoAPI {
         }
     }
 
+    public User getUser(String username, String password) throws AppException{
+        User user=new User();
+
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) new URL(rootAPI.getLinks()
+                    .get("users").getTarget()+"/login/"+username+"/"+password).openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't connect to Twickpic API Web Service");
+        }
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonUser = new JSONObject(sb.toString());
+            // sting.setAuthor(jsonSting.getString("author"));
+            user.setUsername(jsonUser.getString("username"));
+            //user.setPassword(jsonUser.getString("password"));
+            //JSONArray jsonLinks = jsonUser.getJSONArray("links");
+            //parseLinks(jsonLinks, user.getLinks());
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't get response from Twickpic API Web Service");
+        } catch (JSONException e) {
+            throw new AppException("Error parsing Photo Root API");
+        }
+
+
+
+        return user;
+    }
+
     public PhotoCollection getPhotos() throws AppException{
         Log.d(TAG,"getfotos");
         PhotoCollection photos = new PhotoCollection();
@@ -161,7 +203,7 @@ public class PhotoAPI {
     }
 
 
-    public PhotoCollection getPhotosByUser() throws AppException{
+    public PhotoCollection getPhotosByUser(String username) throws AppException{
         Log.d(TAG,"getImages()");
         System.out.print("pataaataaaa");
         PhotoCollection photos = new PhotoCollection();
@@ -169,7 +211,7 @@ public class PhotoAPI {
         HttpURLConnection urlConnection = null;
         try {
             urlConnection = (HttpURLConnection) new URL(rootAPI.getLinks()
-                    .get("photos").getTarget()+"/user/"+"alex").openConnection();
+                    .get("photos").getTarget()+"/user/"+username).openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoInput(true);
             urlConnection.connect();
@@ -487,10 +529,10 @@ public class PhotoAPI {
     }
 
 
-    public Coment writeComment(String content, String url) throws AppException {
+    public Coment writeComment(String content, String url, String user) throws AppException {
         Coment comment=new Coment();
         comment.setContent(content);
-        comment.setUsername("alex");
+        comment.setUsername(user);
         String[] idphoto=url.split("/", 7);
         String id=idphoto[6];
         id=id.replace(".png","");

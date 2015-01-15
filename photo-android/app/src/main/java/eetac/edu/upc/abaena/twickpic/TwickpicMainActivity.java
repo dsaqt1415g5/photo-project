@@ -50,17 +50,17 @@ public class TwickpicMainActivity extends ListActivity {
 
     String serverAddress;
     String serverPort;
-
+    String us;
     //metodo para obtener las fotos en background
     private class FetchPhotosTask extends
-            AsyncTask<Void, Void, PhotoCollection> {
+            AsyncTask<String, Void, PhotoCollection> {
         private ProgressDialog pd;
 
         @Override
-        protected PhotoCollection doInBackground(Void... params) {
+        protected PhotoCollection doInBackground(String... params) {
             PhotoCollection photos = null;
             try {
-             photos = PhotoAPI.getInstance(TwickpicMainActivity.this).getPhotosByUser();
+             photos = PhotoAPI.getInstance(TwickpicMainActivity.this).getPhotosByUser(params[0]);
             } catch (AppException e) {
                 e.printStackTrace();
             }
@@ -114,6 +114,7 @@ public class TwickpicMainActivity extends ListActivity {
         switch (item.getItemId()) {
             case R.id.Buscar:
                 Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("usuario",us);
                 startActivity(intent); //se espera un resultado de la actividad que lanzamos
                 return true;
 
@@ -134,7 +135,8 @@ public class TwickpicMainActivity extends ListActivity {
 
         final String username = prefs.getString("username", null);
         final String password = prefs.getString("password", null);
-
+        String usua = (String) getIntent().getExtras().get("username");
+        us=usua;
         Authenticator.setDefault(new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password
@@ -142,7 +144,6 @@ public class TwickpicMainActivity extends ListActivity {
             }
         });
         Log.d(TAG, "authenticated with " + username + ":" + password);
-        System.out.print(username +" "+ password);
         AssetManager assetManager = getAssets();
         Properties config = new Properties();
         try {
@@ -158,7 +159,7 @@ public class TwickpicMainActivity extends ListActivity {
         PhotoList = new ArrayList<Photo>();
         adapter = new PhotoAdapter(this, PhotoList);
         setListAdapter(adapter);
-        (new FetchPhotosTask()).execute();
+        (new FetchPhotosTask()).execute(usua);
 
 
     }
@@ -175,6 +176,7 @@ public class TwickpicMainActivity extends ListActivity {
         intent.putExtra("url",photo.getLinks().get("selfPhoto").getTarget());
         intent.putExtra("url2",photo.getLinks().get("photoComments").getTarget());
         intent.putExtra("urlFoto",photo.getLinks().get("urlPhoto").getTarget());
+        intent.putExtra("usuario",us);
         startActivity(intent);
 
     }

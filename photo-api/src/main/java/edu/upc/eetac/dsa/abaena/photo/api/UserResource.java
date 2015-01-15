@@ -28,6 +28,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import edu.upc.eetac.dsa.abaena.photo.api.DataSourceSPA;
 import edu.upc.eetac.dsa.abaena.photo.api.MediaType2;
 import edu.upc.eetac.dsa.abaena.photo.api.model.User;
+import edu.upc.eetac.dsa.abaena.photo.api.model.UserCollection;
 
 @Path("/users")
 public class UserResource {
@@ -38,7 +39,7 @@ public class UserResource {
 	private final static String DELETE_USER = "Delete from Users where username=? ";
 	private final static String UPDATE_USER = "update Users set password=ifnull(?,password) where username=?";
 	private final static String INSERT_FOLLOW = "insert into relacionuserfollows (username, followed) values (?,?)";
-	
+	private final static String GET_USERS_FOLLOWING="Select followed from relacionuserfollows where username=?";
 	@GET
 	@Path("/{username}")
 	@Produces(MediaType2.PHOTO_API_USER)
@@ -411,12 +412,45 @@ public class UserResource {
 		return userfollowed;
 	}
 	
-	
-	
-	
-	
-	
-	
+	@GET
+	@Path("/following/{username}")
+	@Produces(MediaType2.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	public UserCollection getUsersFollowing (@PathParam("username") String username){
+		UserCollection users = new UserCollection();
+		Connection conn = null;
+
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USERS_FOLLOWING);
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				User user=new User();
+				user.setUsername(rs.getString("followed"));
+				users.addUser(user);
+
+			} 
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+		return users;
+	}
 	
 }
 	

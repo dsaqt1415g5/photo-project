@@ -20,7 +20,7 @@ import eetac.edu.upc.abaena.twickpic.api.PhotoCollection;
  * Created by Alejandro on 14/01/2015.
  */
 public class PhotoNameActivity extends ListActivity {
-
+    String us;
     private class FetchPhotoNameTask extends
             AsyncTask<String, Void, PhotoCollection> {
         private ProgressDialog pd;
@@ -65,7 +65,7 @@ public class PhotoNameActivity extends ListActivity {
 
         setContentView(R.layout.activity_twickpic_main);
         String photoname = (String) getIntent().getExtras().get("nombrephoto");
-
+        us=(String) getIntent().getExtras().get("usuario");
         (new FetchPhotoNameTask()).execute(photoname);
         PhotoList = new ArrayList<Photo>();
         adapter = new PhotoAdapter(this, PhotoList);
@@ -89,6 +89,7 @@ public class PhotoNameActivity extends ListActivity {
         intent.putExtra("url",photo.getLinks().get("selfPhoto").getTarget());
         intent.putExtra("url2",photo.getLinks().get("photoComments").getTarget());
         intent.putExtra("urlFoto",photo.getLinks().get("urlPhoto").getTarget());
+        intent.putExtra("usuario",us);
         startActivity(intent);
 
     }

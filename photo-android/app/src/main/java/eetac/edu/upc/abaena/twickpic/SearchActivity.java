@@ -30,12 +30,14 @@ public class SearchActivity extends ListActivity {
 
     private ArrayList<Categories> CategoryList;
     private CategoryAdapter categoryadapter;
+    String us;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.search_layout);
+        us=(String) getIntent().getExtras().get("usuario");
         (new FetchCategoriesTask()).execute();
         CategoryList = new ArrayList<Categories>();
         categoryadapter = new CategoryAdapter(this, CategoryList);
@@ -93,6 +95,7 @@ public class SearchActivity extends ListActivity {
         String categoryname = category.getNombre();
         Intent intent = new Intent(this, PhotosCategoryActivity.class);
         intent.putExtra("categoria",categoryname);
+        intent.putExtra("usuario",us);
         startActivity(intent);
 
     }
@@ -101,6 +104,7 @@ public class SearchActivity extends ListActivity {
 
         Intent intent = new Intent(this, PhotoNameActivity.class);
         intent.putExtra("nombrephoto",photoname);
+        intent.putExtra("usuario",us);
         startActivity(intent);
 
     }

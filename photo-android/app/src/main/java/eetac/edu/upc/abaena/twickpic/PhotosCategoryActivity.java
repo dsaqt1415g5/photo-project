@@ -27,7 +27,7 @@ import eetac.edu.upc.abaena.twickpic.api.PhotoCollection;
  */
 public class PhotosCategoryActivity extends ListActivity {
 
-
+    String us;
     private class FetchPhotoCategoryTask extends
             AsyncTask<String, Void, PhotoCollection> {
         private ProgressDialog pd;
@@ -72,7 +72,7 @@ public class PhotosCategoryActivity extends ListActivity {
 
         setContentView(R.layout.activity_twickpic_main);
         String categoryname = (String) getIntent().getExtras().get("categoria");
-
+        us=(String) getIntent().getExtras().get("usuario");
         (new FetchPhotoCategoryTask()).execute(categoryname);
         PhotoList = new ArrayList<Photo>();
         adapter = new PhotoAdapter(this, PhotoList);
@@ -96,6 +96,7 @@ public class PhotosCategoryActivity extends ListActivity {
         intent.putExtra("url",photo.getLinks().get("selfPhoto").getTarget());
         intent.putExtra("url2",photo.getLinks().get("photoComments").getTarget());
         intent.putExtra("urlFoto",photo.getLinks().get("urlPhoto").getTarget());
+        intent.putExtra("usuario",us);
         startActivity(intent);
 
     }

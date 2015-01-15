@@ -98,6 +98,7 @@ public class PhotoDetailActivity extends ListActivity {
 
     private final static String TAG = PhotoDetailActivity.class.getName();
     String urlPhoto;
+    String us;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +108,7 @@ public class PhotoDetailActivity extends ListActivity {
         urlPhoto = (String) getIntent().getExtras().get("url");
         String urlFoto = (String) getIntent().getExtras().get("urlFoto");
         urlFoto=urlFoto.replace(":8080/photo-api/photos/photo",":80/img");
-
+        us=(String) getIntent().getExtras().get("usuario");
 
         String urlComments = (String) getIntent().getExtras().get("url2");
         (new FetchCommentsTask()).execute(urlComments);
@@ -177,6 +178,7 @@ public class PhotoDetailActivity extends ListActivity {
             case R.id.miWrite:
                 Intent intent = new Intent(this, PhotoCommentsActivity.class);
                 intent.putExtra("url_photo", urlPhoto);
+                intent.putExtra("usuario",us);
                 startActivity(intent);
                 return true;
 

@@ -17,6 +17,7 @@ import eetac.edu.upc.abaena.twickpic.api.PhotoAPI;
  */
 public class PhotoCommentsActivity extends Activity {
     String urlPhoto = null;
+    String us;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class PhotoCommentsActivity extends Activity {
         setContentView(R.layout.write_comment_layout);
 
         urlPhoto = (String) getIntent().getExtras().get("url_photo");
+        us=(String) getIntent().getExtras().get("usuario");
     }
 
     public void postComment(View v) {
@@ -31,7 +33,7 @@ public class PhotoCommentsActivity extends Activity {
 
         String content = etContent.getText().toString();
 
-        (new PostCommentTask()).execute(content, urlPhoto);
+        (new PostCommentTask()).execute(content, urlPhoto, us);
     }
 
     private class PostCommentTask extends AsyncTask<String, Void, Coment> {
@@ -42,7 +44,7 @@ public class PhotoCommentsActivity extends Activity {
         protected Coment doInBackground(String... params) {
             Coment comment = null;
             try {
-                comment = PhotoAPI.getInstance(PhotoCommentsActivity.this).writeComment(params[0], params[1]);
+                comment = PhotoAPI.getInstance(PhotoCommentsActivity.this).writeComment(params[0], params[1],params[2]);
 
             } catch (AppException e) {
                 e.printStackTrace();
