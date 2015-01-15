@@ -6,7 +6,6 @@ var password = $.cookie("password");
 $("#UserLogged").text(username);
 getPhotosMain(username);
 
-Bienvenido/a!
 
 });
 
