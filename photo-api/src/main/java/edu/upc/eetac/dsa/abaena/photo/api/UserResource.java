@@ -37,7 +37,7 @@ public class UserResource {
 	private final static String INSERT_USER_INTO_USERS = "insert into Users (username, password, avatar) values(?, MD5(?), null)";
 	private final static String DELETE_USER = "Delete from Users where username=? ";
 	private final static String UPDATE_USER = "update Users set password=ifnull(?,password) where username=?";
-	
+	private final static String INSERT_FOLLOW = "insert into relacionuserfollows (username, followed) values (?,?)";
 	
 	@GET
 	@Path("/{username}")
@@ -341,6 +341,73 @@ public class UserResource {
  
 		return user;
 	}
+	
+	
+	@Path("/follow/{username}/{followed}")
+	@POST
+	@Produces(MediaType2.PHOTO_API_USER)
+	@Consumes(MediaType2.PHOTO_API_USER)
+	public User FollowUuser(@PathParam("username") String username,@PathParam("followed") String followed) {
+		
+		User userfollowed = new User();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmtGetFollowed = null;
+		PreparedStatement stmtInsertFollowed = null;
+
+		try {
+			stmtGetFollowed = conn.prepareStatement(GET_USER_BY_USERNAME);
+			stmtGetFollowed.setString(1, followed);
+			ResultSet rs = stmtGetFollowed.executeQuery();
+			
+			if (rs.next()) {
+				userfollowed.setUsername(rs.getString("username"));
+				userfollowed.setPassword(rs.getString("password"));
+				userfollowed.setAvatar(rs.getInt("avatar"));
+				
+				conn.setAutoCommit(false);// desactivamos las confirmaciones
+				// automaticas
+
+				stmtInsertFollowed = conn.prepareStatement(INSERT_FOLLOW);
+				stmtInsertFollowed.setString(1, username);
+				stmtInsertFollowed.setString(2, followed);
+				stmtInsertFollowed.executeUpdate();
+				conn.commit();
+				
+			} else
+				throw new NotFoundException(followed + " no encontrado. ");
+			} catch (SQLException e) {
+				throw new ServerErrorException(e.getMessage(),
+						Response.Status.INTERNAL_SERVER_ERROR);
+				} 
+		finally {
+			try {
+				if (stmtGetFollowed != null)
+					stmtGetFollowed.close();
+
+				if (stmtInsertFollowed != null)
+					stmtInsertFollowed.close();
+				conn.setAutoCommit(true);
+				conn.close();
+			} catch (SQLException e) {	
+				
+			}
+		}
+		return userfollowed;
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 }

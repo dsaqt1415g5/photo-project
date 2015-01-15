@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+	
+	<title>TwickPic</title>
+	<link rel="shortcut icon" type="image/gif" href="img/logo.gif" />
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<script src="js/ie-emulation-modes-warning.js"></script>
+
+		<style type="text/css">
+			*
+			body {
+				padding-bottom: 40px;
+				background-color: #774px7;
+						}
+			{
+				margin:0px;
+				padding:0px;
+			}
+			
+			#header {
+				margin:auto;
+				width:700px;
+				font-family:Arial, Helvetica, sans-serif;
+			}
+			
+			ul, ol {
+				list-style:none;
+			}
+			
+			.nav > li {
+				float:left;
+			}
+			
+			.nav li a, #UserLogged {
+				background-color:#000;
+				color:#fff;
+				text-decoration:none;
+				padding:15px 16px;
+				display:block;
+			}
+
+			.nav li a:hover {
+				background-color:#434343;
+			}
+
+			.nav li ul {
+				display:none;
+				position:absolute;
+				min-width:140px;
+			}
+			
+			.nav li:hover > ul {
+				display:block;
+			}
+			
+			.nav li ul li {
+				position:relative;
+			}
+			
+			
+			.field>input[type=text],
+			.field>button {
+			display:block;
+			font-family:Arial, Helvetica, sans-serif;
+			}
+
+			.field>input[type=text] {
+			flex:1;
+			padding:0.6em;
+			border:0.2em solid #000;
+			}
+
+			.field>button {
+			padding:0.6em 0.8em;
+			background-color:#000;
+			color:white;
+			border:none;
+			}
+		
+			#galeriamain {
+			  padding:0;
+			  margin:60px auto 0 auto;
+			  list-style-type:none;
+			  height:300px;
+			  width:774px;
+			  border:0;
+			  }
+			 #galeriamain li {
+			  width:200px;
+			  height:200px;
+			  float:left;
+			  border-left:2px solid #000;
+			  border-right:2px solid #000;
+			  }
+			#galeriamain li img {
+			  height:200px;
+			  width:200px;
+			  border:0;
+			  border-right:2px solid #000;
+			  border-top:2px solid #000;
+			  
+			  }
+			  
+			  h2 {
+			    color: #424242;
+				font-family:Arial, Helvetica, sans-serif;
+				text-align:center;
+				margin: 40px auto;
+				line-height: 145%;
+				font-size: 25pt;
+
+				}
+			
+			
+			
+		</style>
+  </head>
+  
+  <body>
+
+      <div class="container">
+
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">TwickPic</a>
+            </div>
+			<div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav ">
+				<li><a id="navbarinicio" href="">Inicio</a></li>
+				<li><span id="UserLogged"></span>
+					<ul>
+					<li><a id="myprofile" href="profile.html">Mi Perfil</a></li>
+					<li><a id="logout"  href="login.html">Salir</a></li>
+					<li><a id="aboutus" href="/login.html">Información</a></li>
+				    </ul>
+				</li>
+                
+				
+              </ul>
+            </div>
+          </div>
+        </nav>
+	  </div> <!-- acaba container -->
+		
+	  <div class="container" ALIGN=center >
+		<h2 id="busquedatitle" >Busqueda de fotos</h2>
+	  </div>
+		
+
+		
+	  <div class="container">
+	    <div class="col-md-1"></div>
+
+		<div class="col-md-8">
+			<div class="izquierda">
+				<ul id="galeriamain"></ul>
+			</div>
+		</div>
+		
+		<div class="col-md-3">
+			<div ALIGN=right>
+			<br/>
+				<div class="field" id="searchfotoform">
+					<input type="text" id="fotobuscada" placeholder="Busca una foto!!" />
+					<button type="button" id="searchfoto">Buscar!</button>
+				</div>
+				
+				<div class="field" id="searchuserform">
+					<input type="text" id="userbuscado" placeholder="Introduce un usuario!!" />
+					<button type="button" id="searchuser">Buscar!</button>
+				</div>
+				<br/>
+				
+				<div class="btn-group">
+					<button type="button" class="btn btn-primary" >Categorías</button>
+					<button type="button" class="btn btn-primary dropdown-toggle"data-toggle="dropdown">
+						<span class="caret"></span>
+						<span class="sr-only">Desplegar menú</span>
+					</button>
+					<ul class="dropdown-menu" id=cat role="menu">
+						<li><a id=cat1 href="#">Moda</a></li>
+						<li><a id=cat2 href="#">Deportes</a></li>
+						<li><a id=cat3 href="#">Coches</a></li>
+						<li><a id=cat4>Viajes</a></li>
+					</ul>
+				</div>
+			</div>	
+		 </div>	
+	  </div>
+ <!-- end of container-->
+  </body>
+	  
+	  <!--script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="js/busqueda.js"></script>
+	<script src="js/jquery.cookie.js"></script>
+  
+</html>
+	  
