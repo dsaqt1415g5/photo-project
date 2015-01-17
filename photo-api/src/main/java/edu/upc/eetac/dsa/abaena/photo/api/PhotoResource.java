@@ -56,11 +56,11 @@ public class PhotoResource {
 	
 	private String GET_COMMENTS_BY_IDPHOTO="Select * from Comments where idphoto = ?";
 	private String INSERT_COMMENT="insert into Comments (username, idphoto, content) values (?,?,?)";
-	private String DELETE_COMMENT_QUERY ="delete from comments where idcomment = ?";
-	private String GET_COMMENT_BY_ID="Select * from comments where idcomment=?";
-	private String UPDATE_COMMENT_QUERY="update comments set content=ifnull(?,content) where idcomment = ?";
-	private String UPDATE_PHOTO_QUERY="update photos set description=ifnull(?,description) where idphoto=?";
-	private String DELETE_PHOTO_QUERY="delete from photos where idphoto=?";
+	private String DELETE_COMMENT_QUERY ="delete from Comments where idcomment = ?";
+	private String GET_COMMENT_BY_ID="Select * from Comments where idcomment=?";
+	private String UPDATE_COMMENT_QUERY="update Comments set content=ifnull(?,content) where idcomment = ?";
+	private String UPDATE_PHOTO_QUERY="update Photos set description=ifnull(?,description) where idphoto=?";
+	private String DELETE_PHOTO_QUERY="delete from Photos where idphoto=?";
 	
 	@Context
 	private Application app;
@@ -83,7 +83,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from photos where username IN (select followed from relacionuserfollows where username=?)");
+			stmt = conn.prepareStatement("select * from Photos where username IN (select followed from RelacionUserFollows where username=?)");
 			stmt.setString(1,username);
 			stmt.executeQuery();
 
@@ -128,7 +128,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from photos where idphoto=?");
+			stmt = conn.prepareStatement("select * from Photos where idphoto=?");
 			stmt.setString(1,idphoto);
 			stmt.executeQuery();
 
@@ -174,7 +174,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from photos where name like ?");
+			stmt = conn.prepareStatement("select * from Photos where name like ?");
 			stmt.setString(1,"%" + name + "%");
 			stmt.executeQuery();
 
@@ -225,9 +225,9 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from photos where idphoto IN "
-					+ "(select idphoto from relationphotocategory where idcategory IN "
-					+ "( select idcategory from categories where nombre like ?));");
+			stmt = conn.prepareStatement("select * from Photos where idphoto IN "
+					+ "(select idphoto from RelationPhotoCategory where idcategory IN "
+					+ "( select idcategory from Categories where nombre like ?));");
 			stmt.setString(1,"%" + category + "%");
 			stmt.executeQuery();
 

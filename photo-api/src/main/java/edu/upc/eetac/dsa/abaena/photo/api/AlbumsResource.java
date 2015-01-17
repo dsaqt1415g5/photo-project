@@ -31,7 +31,7 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.User;
 public class AlbumsResource {
 
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
-	private String GET_ALBUMS_BY_USERNAME="select * from albums where username=?";
+	private String GET_ALBUMS_BY_USERNAME="select * from Albums where username=?";
 	private String INSERT_ALBUM="insert into Albums (nombre, description, username) values (?,?,?)";
 	private String DELETE_ALBUM_QUERY="delete from Albums where idalbum = ?";
 	private String EDITAR_ALBUM = "update Albums set nombre=ifnull(?,nombre), description=ifnull(?,description) where idalbum=?";
