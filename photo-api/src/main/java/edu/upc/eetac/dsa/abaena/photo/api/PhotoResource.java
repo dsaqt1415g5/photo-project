@@ -83,7 +83,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from photos where username=?");
+			stmt = conn.prepareStatement("select * from photos where username IN (select followed from relacionuserfollows where username=?)");
 			stmt.setString(1,username);
 			stmt.executeQuery();
 
