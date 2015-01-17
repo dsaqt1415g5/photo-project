@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-cde0fe43c1d155a84c58787d13ed53f1de001e61.jar" />
+    </item>
+    <item
+        jar="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\classes-398486a399bcc4b0ff071e75ee47e085c3635fbc.jar" />
+    </item>
+    <item
+        jar="C:\Users\Alejandro\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\gson-2.3.1-17c6edd41edf802127e2e99cb672811875e72a38.jar" />
+    </item>
+    <item
+        jar="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-c14f502884f2e912c6c450d6840dbdae07fec454.jar" />
+    </item>
+    <item
+        jar="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\classes-4b55f1d031169e5c8829915a2febce7b66e567d6.jar" />
+    </item>
+
+</items>

@@ -1,0 +1,6 @@
+C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\classes\debug
+C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-cde0fe43c1d155a84c58787d13ed53f1de001e61.jar
+C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-c14f502884f2e912c6c450d6840dbdae07fec454.jar
+C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\gson-2.3.1-17c6edd41edf802127e2e99cb672811875e72a38.jar
+C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\classes-4b55f1d031169e5c8829915a2febce7b66e567d6.jar
+C:\Users\Alejandro\dsa-projects\photo-project\photo-android\app\build\intermediates\pre-dexed\debug\classes-398486a399bcc4b0ff071e75ee47e085c3635fbc.jar
