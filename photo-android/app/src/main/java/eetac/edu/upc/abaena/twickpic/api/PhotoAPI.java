@@ -14,7 +14,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Properties;
 
@@ -429,11 +431,15 @@ public class PhotoAPI {
 
         ComentCollection comments = new ComentCollection();
         urlComments=urlComments.replace(".png","");
-        HttpURLConnection urlConnection = null;
+
+        HttpURLConnection urlConnection;
         try {
+            //String mediatype="application/vnd.photo.api.coment+collection+json";
             URL url = new URL(urlComments);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
+            //urlConnection.setRequestProperty("Accept",
+            //        mediatype);
             urlConnection.setDoInput(true);
             urlConnection.connect();
         } catch (IOException e) {
@@ -443,8 +449,9 @@ public class PhotoAPI {
 
         BufferedReader reader;
         try {
-            //por aqui peta
-            reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            int status = urlConnection.getResponseCode();
+            reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -515,8 +522,6 @@ public class PhotoAPI {
             photo.setPhotoURL(jsonPhoto.getString("photoURL"));
             JSONArray jsonLinks = jsonPhoto.getJSONArray("links");
             parseLinks(jsonLinks, photo.getLinks());
-
-
 
         } catch (IOException e) {
             throw new AppException(
