@@ -100,7 +100,7 @@ public class PhotoResource {
 				image.setFile(rs.getString("file"));
 				image.setName(rs.getString("name"));
 				image.setDescription(rs.getString("description"));
-				image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				//image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
 				image.setPhotoURL(app.getProperties().get("imgBaseURL")+ image.getFile());
 				images.addPhoto(image);
 			}
@@ -144,7 +144,7 @@ public class PhotoResource {
 				imagen.setFile(rs.getString("file"));
 				imagen.setName(rs.getString("name"));
 				imagen.setDescription(rs.getString("description"));
-				imagen.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				//imagen.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
 				imagen.setPhotoURL(app.getProperties().get("imgBaseURL")+ imagen.getFile());
 				
 			}
@@ -191,7 +191,7 @@ public class PhotoResource {
 				image.setFile(rs.getString("file"));
 				image.setName(rs.getString("name"));
 				image.setDescription(rs.getString("description"));
-				image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				//image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
 				image.setPhotoURL(app.getProperties().get("imgBaseURL")+ image.getFile());
 				images.addPhoto(image);
 			}
@@ -242,7 +242,7 @@ public class PhotoResource {
 				image.setFile(rs.getString("file"));
 				image.setName(rs.getString("name"));
 				image.setDescription(rs.getString("description"));
-				image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
+				//image.setTimestamp (rs.getTimestamp("creationTimestamp").getTime());
 				image.setPhotoURL(app.getProperties().get("imgBaseURL")+ image.getFile());
 				images.addPhoto(image);
 			}
@@ -283,7 +283,7 @@ public class PhotoResource {
 				comment.setIdcomment(rs.getInt("idcomment"));
 				comment.setUsername(rs.getString("username"));
 				comment.setIdphoto(rs.getString("idphoto"));
-				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
+				//comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));	
 				comments.addComment(comment);
 			}
@@ -398,7 +398,7 @@ public class PhotoResource {
 				comment.setIdcomment(rs.getInt("idcomment"));
 				comment.setUsername(rs.getString("username"));
 				comment.setIdphoto(rs.getString("idphoto"));
-				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
+				//comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));
 			}else {
 				throw new NotFoundException("There's no comment with idcomment="
@@ -439,7 +439,7 @@ public Coment getCommentFromDataBase(int idcomment){
 				comment.setIdcomment(rs.getInt("idcomment"));
 				comment.setUsername(rs.getString("username"));
 				comment.setIdphoto(rs.getString("idphoto"));
-				comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
+				//comment.setCreationTimestamp(rs.getTimestamp("creationTimestamp").getTime());
 				comment.setContent(rs.getString("content"));
 			}else {
 				throw new NotFoundException("There's no comment with idcomment="
