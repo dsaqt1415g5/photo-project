@@ -16,7 +16,7 @@ create table photos (
 	file varchar (50) unique,
 	name varchar (50),
 	description varchar (50),
-	creationTimestamp timestamp,
+	creationTimestamp timestamp on update CURRENT_TIMESTAMP,
 	foreign key (username) references users(username),
 	foreign key (autor) references users(username)
 );
@@ -25,7 +25,7 @@ create table comments (
 	idcomment int not null auto_increment primary key,
 	username varchar (50) not null,
 	idphoto varchar(36) not null,
-	creationTimestamp timestamp not null,
+	creationTimestamp timestamp not null on update CURRENT_TIMESTAMP,
 	content varchar(500) not null,
 	foreign key (username) references users(username) on delete cascade,
 	foreign key (idphoto) references photos(idphoto) on delete cascade
