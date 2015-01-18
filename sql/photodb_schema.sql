@@ -3,13 +3,13 @@ create database photosdb;
 
 use photosdb; 
 
-create table Users (
+create table users (
 	username varchar (50) primary key not null,
 	password varchar (50) not null,
 	avatar int null
 );
 
-create table Photos (
+create table photos (
 	idphoto	varchar(36) not null primary key,
 	username varchar (50) not null,
 	autor varchar (50) not null,
@@ -21,7 +21,7 @@ create table Photos (
 	foreign key (autor) references Users(username)
 );
 
-create table Comments (
+create table comments (
 	idcomment int not null auto_increment primary key,
 	username varchar (50) not null,
 	idphoto varchar(36) not null,
@@ -31,13 +31,13 @@ create table Comments (
 	foreign key (idphoto) references Photos(idphoto) on delete cascade
 );
 
-create table Categories(
+create table categories(
 	idcategory int not null auto_increment primary key,
 	nombre varchar(50)	
 );
 
 
-create table RelationPhotoCategory (
+create table relationphotocategory (
 	primary key  (idphoto, idcategory),
 	idphoto varchar(36) not null,
 	idcategory int not null,
@@ -45,7 +45,7 @@ create table RelationPhotoCategory (
 	foreign key (idcategory) references Categories(idcategory) on delete cascade
 );
 
-create table Albums (
+create table albums (
 	idalbum int not null auto_increment primary key,
 	nombre varchar(50) not null,
 	description varchar(50) not null,
@@ -53,7 +53,7 @@ create table Albums (
 	foreign key (username) references Users(username) on delete cascade 
 );
 
-create table RelationPhotoAlbum (
+create table relationphotoalbum (
 	primary key  (idphoto, idalbum),
 	idphoto varchar(36) not null,
 	idalbum int not null,
@@ -61,7 +61,7 @@ create table RelationPhotoAlbum (
 	foreign key (idalbum) references Albums(idalbum) on delete cascade
 );
 
-create table RelacionUserFollows (
+create table relacionuserfollows (
 	username varchar (50) not null,
 	followed varchar (50) not null,
 	primary key (followed, username),
@@ -69,7 +69,7 @@ create table RelacionUserFollows (
 	foreign key  (username) references Users(username)
 );
 
-create table RelacionUserCategories (
+create table relacionusercategories (
 	username varchar (50) not null,
 	idcategory int not null,
 	foreign key (username) references Users(username),

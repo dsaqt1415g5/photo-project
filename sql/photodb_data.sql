@@ -1,14 +1,14 @@
-insert into Users (username, password, avatar) values ('pau', 'pau', null);
-insert into Users (username, password, avatar) values ('cris', 'cris', null);
-insert into Users (username, password, avatar) values ('alex', 'alex', null);
+insert into users (username, password, avatar) values ('pau', 'pau', null);
+insert into users (username, password, avatar) values ('cris', 'cris', null);
+insert into users (username, password, avatar) values ('alex', 'alex', null);
 
 -- insert into Photos (idphoto, username, autor, name, description) values ('1','pau','pau', 'Barcelona', 'holahola');
 -- insert into Photos (idphoto, username, autor, name, description) values ('2','cris','alex', 'Castelldefels', 'holahola');
 -- insert into Photos (idphoto, username, autor, name, description) values ('3','alex','cris', 'Honolulu', 'holahola');
 
-update Users set avatar = 1 where username = 'pau';
-update Users set avatar = 2 where username = 'cris';
-update Users set avatar = 3 where username = 'alex';
+update users set avatar = 1 where username = 'pau';
+update users set avatar = 2 where username = 'cris';
+update users set avatar = 3 where username = 'alex';
 
 
 -- insert into Comments (username, idphoto, content) values ('pau','1','comentario de pau a la 1a foto de pau');
@@ -16,9 +16,9 @@ update Users set avatar = 3 where username = 'alex';
 -- insert into Comments (username, idphoto, content) values ('alex','3','comentario de alex a la 3a foto de pau');
 
 
-insert into Categories (nombre) values ('futbol');
-insert into Categories (nombre) values ('moda');
-insert into Categories (nombre) values ('coches');
+insert into categories (nombre) values ('futbol');
+insert into categories (nombre) values ('moda');
+insert into categories (nombre) values ('coches');
 
 -- insert into RelationPhotoCategory (idphoto, idcategory) values ('1',1);
 -- insert into RelationPhotoCategory (idphoto, idcategory) values ('2',2);
@@ -26,19 +26,19 @@ insert into Categories (nombre) values ('coches');
 -- insert into RelationPhotoCategory (idphoto, idcategory) values ('3',2);
 -- insert into RelationPhotoCategory (idphoto, idcategory) values ('3',3);
 
-insert into Albums (nombre, description, username) values ('coches','bmx voladoras y deportes', 'pau');
+insert into albums (nombre, description, username) values ('coches','bmx voladoras y deportes', 'pau');
 
 -- insert into RelationPhotoAlbum (idphoto, idalbum) values ('1',1);
 -- insert into RelationPhotoAlbum (idphoto, idalbum) values ('2',1);
 -- insert into RelationPhotoAlbum (idphoto, idalbum) values ('3',1);
 
 
-insert into RelacionUserFollows (username, followed) values ('pau', 'cris');
-insert into RelacionUserFollows (username, followed) values ('alex', 'cris');
+insert into relacionuserfollows (username, followed) values ('pau', 'cris');
+insert into relacionuserfollows (username, followed) values ('alex', 'cris');
 
-insert into RelacionUserCategories (username, idcategory) values ('pau', 1);
-insert into RelacionUserCategories (username, idcategory) values ('pau', 2);
-insert into RelacionUserCategories (username, idcategory) values ('pau', 3);
+insert into relacionusercategories (username, idcategory) values ('pau', 1);
+insert into relacionusercategories (username, idcategory) values ('pau', 2);
+insert into relacionusercategories (username, idcategory) values ('pau', 3);
 
 
 
