@@ -61,6 +61,10 @@ public class PhotoResource {
 	private String UPDATE_COMMENT_QUERY="Update Comments set content=ifnull(?,content) where idcomment = ?";
 	private String UPDATE_PHOTO_QUERY="Update Photos set description=ifnull(?,description) where idphoto=?";
 	private String DELETE_PHOTO_QUERY="Delete from Photos where idphoto=?";
+	private String GET_PHOTOS_BY_USER="Select * from Photos where username=?";
+	private String GET_PHOTO="Select * from Photos where idphoto=?";
+	private String GET_PHOTOS_BY_NAME="Select * from Photos where name like ?";
+	private String GET_PHOTOS_BY_CATEGORY="Select * from Photos where idphoto IN (Select idphoto from RelationPhotoCategory where idcategory IN (Select idcategory from Categories where nombre like ?))";
 	
 	@Context
 	private Application app;
@@ -83,7 +87,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("Select * from Photos where username=?");
+			stmt = conn.prepareStatement(GET_PHOTOS_BY_USER);
 			stmt.setString(1,username);
 			stmt.executeQuery();
 
@@ -128,7 +132,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("Select * from Photos where idphoto=?");
+			stmt = conn.prepareStatement(GET_PHOTO);
 			stmt.setString(1,idphoto);
 			stmt.executeQuery();
 
@@ -174,7 +178,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from Photos where name like ?");
+			stmt = conn.prepareStatement(GET_PHOTOS_BY_NAME);
 			stmt.setString(1,"%" + name + "%");
 			stmt.executeQuery();
 
@@ -225,9 +229,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from Photos where idphoto IN "
-					+ "(select idphoto from RelationPhotoCategory where idcategory IN "
-					+ "( select idcategory from Categories where nombre like ?));");
+			stmt = conn.prepareStatement(GET_PHOTOS_BY_CATEGORY);
 			stmt.setString(1,"%" + category + "%");
 			stmt.executeQuery();
 

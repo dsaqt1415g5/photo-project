@@ -40,6 +40,8 @@ public class UserResource {
 	private final static String UPDATE_USER = "Update Users set password=ifnull(?,password) where username=?";
 	private final static String INSERT_FOLLOW = "Insert into RelacionUserFollows (username, followed) values (?,?)";
 	private final static String GET_USERS_FOLLOWING="Select followed from RelacionUserFollows where username=?";
+	private static String GET_USERNAME="SELECT * FROM Users WHERE username=?";
+	
 	@GET
 	@Path("/{username}")
 	@Produces(MediaType2.PHOTO_API_USER)
@@ -283,7 +285,7 @@ public class UserResource {
 	}
 
 	public String buildGetUserByUsername() {
-		return "SELECT * FROM Users WHERE username=?";
+		return GET_USER_BY_USERNAME;
 	}
 	
 	
