@@ -107,7 +107,7 @@ public class PhotoDetailActivity extends ListActivity {
 
         urlPhoto = (String) getIntent().getExtras().get("url");
         String urlFoto = (String) getIntent().getExtras().get("urlFoto");
-        urlFoto=urlFoto.replace(":8080/photo-api/photos/photo",":80/img");
+        urlFoto=urlFoto.replace(":8080/photo-api/photos/photo","/photo/img");
         us=(String) getIntent().getExtras().get("usuario");
 
         String urlComments = (String) getIntent().getExtras().get("url2");

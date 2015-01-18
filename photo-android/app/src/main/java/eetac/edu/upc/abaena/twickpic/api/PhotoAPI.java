@@ -189,7 +189,7 @@ public class PhotoAPI {
                 photo.setUser(jsonPhoto.getString("user"));
                 photo.setDescription(jsonPhoto.getString("description"));
                 photo.setPhotoURL(jsonPhoto.getString("url"));
-                photo.setTimestamp(jsonPhoto.getLong("timestamp"));
+                //photo.setTimestamp(jsonPhoto.getLong("timestamp"));
                 jsonLinks = jsonPhoto.getJSONArray("links");
                 parseLinks(jsonLinks, photo.getLinks());
                 photos.getPhotos().add(photo);
