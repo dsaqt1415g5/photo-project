@@ -31,11 +31,11 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.User;
 public class AlbumsResource {
 
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
-	private String GET_ALBUMS_BY_USERNAME="Select * from Albums where username=?";
-	private String INSERT_ALBUM="Insert into Albums (nombre, description, username) values (?,?,?)";
-	private String DELETE_ALBUM_QUERY="Delete from Albums where idalbum = ?";
-	private String EDITAR_ALBUM = "Update Albums set nombre=ifnull(?,nombre), description=ifnull(?,description) where idalbum=?";
-	private String GET_ALBUM_BY_ID = "Select * from Albums where idalbum=?";
+	private String GET_ALBUMS_BY_USERNAME="select * from albums where username=?";
+	private String INSERT_ALBUM="insert into albums (nombre, description, username) values (?,?,?)";
+	private String DELETE_ALBUM_QUERY="delete from albums where idalbum = ?";
+	private String EDITAR_ALBUM = "update albums set nombre=ifnull(?,nombre), description=ifnull(?,description) where idalbum=?";
+	private String GET_ALBUM_BY_ID = "select * from albums where idalbum=?";
 	
 	@Context
 	private SecurityContext security;
