@@ -17,8 +17,8 @@ create table photos (
 	name varchar (50),
 	description varchar (50),
 	creationTimestamp timestamp,
-	foreign key (username) references Users(username),
-	foreign key (autor) references Users(username)
+	foreign key (username) references users(username),
+	foreign key (autor) references users(username)
 );
 
 create table comments (
@@ -27,8 +27,8 @@ create table comments (
 	idphoto varchar(36) not null,
 	creationTimestamp timestamp not null,
 	content varchar(500) not null,
-	foreign key (username) references Users(username) on delete cascade,
-	foreign key (idphoto) references Photos(idphoto) on delete cascade
+	foreign key (username) references users(username) on delete cascade,
+	foreign key (idphoto) references photos(idphoto) on delete cascade
 );
 
 create table categories(
@@ -41,8 +41,8 @@ create table relationphotocategory (
 	primary key  (idphoto, idcategory),
 	idphoto varchar(36) not null,
 	idcategory int not null,
-	foreign key (idphoto) references Photos(idphoto) on delete cascade,
-	foreign key (idcategory) references Categories(idcategory) on delete cascade
+	foreign key (idphoto) references photos(idphoto) on delete cascade,
+	foreign key (idcategory) references categories(idcategory) on delete cascade
 );
 
 create table albums (
@@ -50,28 +50,28 @@ create table albums (
 	nombre varchar(50) not null,
 	description varchar(50) not null,
 	username varchar (50) not null,
-	foreign key (username) references Users(username) on delete cascade 
+	foreign key (username) references users(username) on delete cascade 
 );
 
 create table relationphotoalbum (
 	primary key  (idphoto, idalbum),
 	idphoto varchar(36) not null,
 	idalbum int not null,
-	foreign key (idphoto) references Photos(idphoto) on delete cascade,
-	foreign key (idalbum) references Albums(idalbum) on delete cascade
+	foreign key (idphoto) references photos(idphoto) on delete cascade,
+	foreign key (idalbum) references albums(idalbum) on delete cascade
 );
 
 create table relacionuserfollows (
 	username varchar (50) not null,
 	followed varchar (50) not null,
 	primary key (followed, username),
-	foreign key (followed) references Users(username),
-	foreign key  (username) references Users(username)
+	foreign key (followed) references users(username),
+	foreign key  (username) references users(username)
 );
 
 create table relacionusercategories (
 	username varchar (50) not null,
 	idcategory int not null,
-	foreign key (username) references Users(username),
-	foreign key (idcategory)  references Categories(idcategory)
+	foreign key (username) references users(username),
+	foreign key (idcategory)  references categories(idcategory)
 );
