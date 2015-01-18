@@ -55,12 +55,12 @@ public class PhotoResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
 	
 	private String GET_COMMENTS_BY_IDPHOTO="Select * from Comments where idphoto = ?";
-	private String INSERT_COMMENT="insert into Comments (username, idphoto, content) values (?,?,?)";
-	private String DELETE_COMMENT_QUERY ="delete from Comments where idcomment = ?";
+	private String INSERT_COMMENT="Insert into Comments (username, idphoto, content) values (?,?,?)";
+	private String DELETE_COMMENT_QUERY ="Delete from Comments where idcomment = ?";
 	private String GET_COMMENT_BY_ID="Select * from Comments where idcomment=?";
-	private String UPDATE_COMMENT_QUERY="update Comments set content=ifnull(?,content) where idcomment = ?";
-	private String UPDATE_PHOTO_QUERY="update Photos set description=ifnull(?,description) where idphoto=?";
-	private String DELETE_PHOTO_QUERY="delete from Photos where idphoto=?";
+	private String UPDATE_COMMENT_QUERY="Update Comments set content=ifnull(?,content) where idcomment = ?";
+	private String UPDATE_PHOTO_QUERY="Update Photos set description=ifnull(?,description) where idphoto=?";
+	private String DELETE_PHOTO_QUERY="Delete from Photos where idphoto=?";
 	
 	@Context
 	private Application app;
@@ -83,7 +83,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from Photos where username IN (select followed from RelacionUserFollows where username=?)");
+			stmt = conn.prepareStatement("Select * from Photos where username=?");
 			stmt.setString(1,username);
 			stmt.executeQuery();
 
@@ -128,7 +128,7 @@ public class PhotoResource {
 
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("select * from Photos where idphoto=?");
+			stmt = conn.prepareStatement("Select * from Photos where idphoto=?");
 			stmt.setString(1,idphoto);
 			stmt.executeQuery();
 

@@ -33,12 +33,12 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.UserCollection;
 @Path("/users")
 public class UserResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
-	private final static String GET_USER_BY_USER = "select * from Users where username=? and password=?";
+	private final static String GET_USER_BY_USER = "Select * from Users where username=? and password=?";
 	private final static String GET_USER_BY_USERNAME = "Select * from Users where username=?";
-	private final static String INSERT_USER_INTO_USERS = "insert into Users (username, password, avatar) values(?, MD5(?), null)";
+	private final static String INSERT_USER_INTO_USERS = "Insert into Users (username, password, avatar) values(?, MD5(?), null)";
 	private final static String DELETE_USER = "Delete from Users where username=? ";
-	private final static String UPDATE_USER = "update Users set password=ifnull(?,password) where username=?";
-	private final static String INSERT_FOLLOW = "insert into RelacionUserFollows (username, followed) values (?,?)";
+	private final static String UPDATE_USER = "Update Users set password=ifnull(?,password) where username=?";
+	private final static String INSERT_FOLLOW = "Insert into RelacionUserFollows (username, followed) values (?,?)";
 	private final static String GET_USERS_FOLLOWING="Select followed from RelacionUserFollows where username=?";
 	@GET
 	@Path("/{username}")
@@ -283,7 +283,7 @@ public class UserResource {
 	}
 
 	public String buildGetUserByUsername() {
-		return "SELECT *FROM Users WHERE username=?";
+		return "SELECT * FROM Users WHERE username=?";
 	}
 	
 	
