@@ -33,14 +33,14 @@ import edu.upc.eetac.dsa.abaena.photo.api.model.UserCollection;
 @Path("/users")
 public class UserResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
-	private final static String GET_USER_BY_USER = "Select * from Users where username=? and password=?";
-	private final static String GET_USER_BY_USERNAME = "Select * from Users where username=?";
-	private final static String INSERT_USER_INTO_USERS = "Insert into Users (username, password, avatar) values(?, MD5(?), null)";
-	private final static String DELETE_USER = "Delete from Users where username=? ";
-	private final static String UPDATE_USER = "Update Users set password=ifnull(?,password) where username=?";
-	private final static String INSERT_FOLLOW = "Insert into RelacionUserFollows (username, followed) values (?,?)";
-	private final static String GET_USERS_FOLLOWING="Select followed from RelacionUserFollows where username=?";
-	private static String GET_USERNAME="SELECT * FROM Users WHERE username=?";
+	private final static String GET_USER_BY_USER = "Select * from users where username=? and password=?";
+	private final static String GET_USER_BY_USERNAME = "Select * from users where username=?";
+	private final static String INSERT_USER_INTO_USERS = "Insert into users (username, password, avatar) values(?, MD5(?), null)";
+	private final static String DELETE_USER = "Delete from users where username=? ";
+	private final static String UPDATE_USER = "Update users set password=ifnull(?,password) where username=?";
+	private final static String INSERT_FOLLOW = "Insert into relacionuserfollows (username, followed) values (?,?)";
+	private final static String GET_USERS_FOLLOWING="Select followed from relacionuserfollows where username=?";
+	private static String GET_USERNAME="SELECT * FROM users WHERE username=?";
 	
 	@GET
 	@Path("/{username}")

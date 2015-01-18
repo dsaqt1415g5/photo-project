@@ -30,7 +30,7 @@ public class CategoriesResource {
 	@Context
 	private SecurityContext security;
 	
-	private String GET_CATEGORIES = "Select * from Categories";
+	private String GET_CATEGORIES = "Select * from categories";
 	
 	@GET
 	@Produces(MediaType2.PHOTO_API_CATEGORIES_COLLECTION)

@@ -54,17 +54,17 @@ public class PhotoResource {
 	
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
 	
-	private String GET_COMMENTS_BY_IDPHOTO="Select * from Comments where idphoto = ?";
-	private String INSERT_COMMENT="Insert into Comments (username, idphoto, content) values (?,?,?)";
-	private String DELETE_COMMENT_QUERY ="Delete from Comments where idcomment = ?";
-	private String GET_COMMENT_BY_ID="Select * from Comments where idcomment=?";
-	private String UPDATE_COMMENT_QUERY="Update Comments set content=ifnull(?,content) where idcomment = ?";
-	private String UPDATE_PHOTO_QUERY="Update Photos set description=ifnull(?,description) where idphoto=?";
-	private String DELETE_PHOTO_QUERY="Delete from Photos where idphoto=?";
-	private String GET_PHOTOS_BY_USER="Select * from Photos where username=?";
-	private String GET_PHOTO="Select * from Photos where idphoto=?";
-	private String GET_PHOTOS_BY_NAME="Select * from Photos where name like ?";
-	private String GET_PHOTOS_BY_CATEGORY="Select * from Photos where idphoto IN (Select idphoto from RelationPhotoCategory where idcategory IN (Select idcategory from Categories where nombre like ?))";
+	private String GET_COMMENTS_BY_IDPHOTO="Select * from comments where idphoto = ?";
+	private String INSERT_COMMENT="Insert into comments (username, idphoto, content) values (?,?,?)";
+	private String DELETE_COMMENT_QUERY ="Delete from comments where idcomment = ?";
+	private String GET_COMMENT_BY_ID="Select * from comments where idcomment=?";
+	private String UPDATE_COMMENT_QUERY="Update comments set content=ifnull(?,content) where idcomment = ?";
+	private String UPDATE_PHOTO_QUERY="Update photos set description=ifnull(?,description) where idphoto=?";
+	private String DELETE_PHOTO_QUERY="Delete from photos where idphoto=?";
+	private String GET_PHOTOS_BY_USER="Select * from photos where username=?";
+	private String GET_PHOTO="Select * from photos where idphoto=?";
+	private String GET_PHOTOS_BY_NAME="Select * from photos where name like ?";
+	private String GET_PHOTOS_BY_CATEGORY="Select * from photos where idphoto IN (Select idphoto from relationphotocategory where idcategory IN (Select idcategory from categories where nombre like ?))";
 	
 	@Context
 	private Application app;
@@ -602,7 +602,7 @@ public Coment getCommentFromDataBase(int idcomment){
 		}
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement("insert into Photos (idphoto, "
+			stmt = conn.prepareStatement("insert into photos (idphoto, "
 					+ "username, autor, name, description) "
 					+ "values(?,?,?,?,?)");
 			
